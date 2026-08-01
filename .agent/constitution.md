@@ -41,11 +41,12 @@ All agents MUST observe these rules at all times. No exceptions without explicit
 - ✅ All secrets live exclusively in `.env` files (gitignored) or the Vercel/Dokploy secrets dashboard
 - ✅ Reference `.env.example` for required variable names only (no values)
 
-### 3.2 Branch & Merge Rules
-- ❌ Never commit directly to `main`
-- ✅ All changes go through feature branches: `feat/`, `fix/`, `chore/`, `docs/`
-- ✅ Every merge to `main` requires CI gate to pass (see `hooks/pre-deploy.md`)
-- ✅ HITL checkpoint: CK must review and approve before any `main` merge
+### 3.2 Branch Strategy
+- ✅ **Solo workflow**: CK commits directly to `main` (sole developer — approved 2026-08-01)
+- ✅ CI gate runs on every push to `main` — fix failures before the next push
+- ✅ Every push must include a `CHANGELOG.md` entry describing the change
+- ✅ Agents working autonomously should still use feature branches and await CK review
+- ❌ Never force-push to `main` — use `git revert` to undo mistakes
 
 ### 3.3 Deployment Rules
 - ❌ Never auto-deploy to production without CK's explicit "deploy approved" message
