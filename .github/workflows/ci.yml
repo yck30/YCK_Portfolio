@@ -1,0 +1,64 @@
+name: CI — Quality Gate
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality-gate:
+    name: Lint · TypeCheck · Build · Audit
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # ── Gate 1: Lint ────────────────────────────────────────────
+      - name: Lint
+        run: pnpm lint
+
+      # ── Gate 2: TypeScript ──────────────────────────────────────
+      - name: TypeScript check
+        run: npx tsc --noEmit
+
+      # ── Gate 3: Build ───────────────────────────────────────────
+      - name: Build
+        run: pnpm build
+
+      # ── Gate 4: Dependency Audit ────────────────────────────────
+      - name: npm audit (high+)
+        run: npm audit --audit-level=high
+        # Note: use `continue-on-error: true` temporarily if baseline
+        # vulnerabilities exist in transitive deps during migration
+
+      # ── Summary ─────────────────────────────────────────────────
+      - name: CI Summary
+        if: always()
+        run: |
+          echo "## CI Gate Results" >> $GITHUB_STEP_SUMMARY
+          echo "| Check | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|---|---|" >> $GITHUB_STEP_SUMMARY
+          echo "| Lint | ${{ steps.lint.outcome || 'completed' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| TypeScript | completed |" >> $GITHUB_STEP_SUMMARY
+          echo "| Build | completed |" >> $GITHUB_STEP_SUMMARY
+          echo "| Audit | completed |" >> $GITHUB_STEP_SUMMARY

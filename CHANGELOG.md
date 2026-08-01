@@ -1,6 +1,15 @@
 # Changelog
 
-## 2026-08-01
+## 2026-08-01 (CI/CD Governance)
+
+- Created `.github/workflows/ci.yml` — GitHub Actions CI gate (lint → typecheck → build → npm audit).
+- Created `.github/workflows/security.yml` — Gitleaks secret scan + dependency audit + OWASP static check (on push/PR/weekly cron).
+- Created `.github/PULL_REQUEST_TEMPLATE.md` — Structured PR checklist enforcing Definition of Done.
+- Created `.github/CODEOWNERS` — All files require `@yck30` review; enforces RACI matrix.
+- Created `.github/dependabot.yml` — Automated weekly dependency update PRs (npm + GitHub Actions).
+- Deleted remote `master` branch; `main` is now the sole default branch.
+
+## 2026-08-01 (Foundation)
 
 - Renamed default branch `master` → `main` (GitHub convention).
 - Established 5-layer Agentic Infrastructure under `.agent/`:

@@ -1,0 +1,96 @@
+name: Security — Secret Scan & Audit
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+  schedule:
+    # Run weekly on Monday at 08:00 UTC (16:00 UTC+8)
+    - cron: "0 8 * * 1"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  secret-scan:
+    name: Secret Detection (Gitleaks)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Full history for secret scanning
+
+      - name: Gitleaks Secret Scan
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE }}  # Optional — free for public repos
+
+  dependency-audit:
+    name: Dependency Vulnerability Audit
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Audit — Critical & High
+        run: npm audit --audit-level=high
+
+      - name: Audit — Full report (informational)
+        run: npm audit --json > audit-report.json 2>&1 || true
+
+      - name: Upload audit report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: audit-report-${{ github.sha }}
+          path: audit-report.json
+          retention-days: 30
+
+  owasp-check:
+    name: OWASP Top-10 Static Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Check for dangerous patterns
+        run: |
+          echo "Checking for dangerous code patterns..."
+
+          # Check for eval() usage
+          if grep -rn "eval(" src/ --include="*.ts" --include="*.tsx" --include="*.js" | grep -v "// safe:"; then
+            echo "::warning::eval() detected in source files. Review required."
+          fi
+
+          # Check for dangerouslySetInnerHTML without sanitization note
+          if grep -rn "dangerouslySetInnerHTML" src/ --include="*.tsx" --include="*.jsx" | grep -v "// sanitized"; then
+            echo "::warning::dangerouslySetInnerHTML detected. Verify input is sanitized."
+          fi
+
+          # Check for hardcoded localhost that might be prod code
+          if grep -rn "localhost" src/ --include="*.ts" --include="*.tsx" | grep -v "// dev-only" | grep -v "__tests__"; then
+            echo "::notice::localhost references found in src/. Ensure these are dev-only."
+          fi
+
+          echo "OWASP static pattern check complete."

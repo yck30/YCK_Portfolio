@@ -1,0 +1,18 @@
+# CODEOWNERS
+# Reference: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+#
+# CK (yck30) is the sole owner of all files in this repository.
+# All PRs to main require CK's review and approval.
+# This enforces the RACI matrix defined in .agent/constitution.md
+
+# Global ownership — CK reviews everything
+* @yck30
+
+# Agent governance files — extra scrutiny
+.agent/ @yck30
+
+# Security-sensitive files
+SECURITY.md @yck30
+.github/workflows/ @yck30
+Dockerfile @yck30
+nginx.conf @yck30
