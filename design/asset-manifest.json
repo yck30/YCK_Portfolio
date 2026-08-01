@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "site": "Aurel liquid hero prototype",
+  "updated_at": "2026-07-17T23:20:00-04:00",
+  "owner": "Matrix",
+  "assets": [
+    {
+      "id": "hero-video",
+      "section": "hero",
+      "role": "load-bearing background protagonist",
+      "status": "approved",
+      "source_type": "supplied",
+      "provenance": {
+        "url_or_path": "/home/clawd/.openclaw/media/inbound/kling3_water_animation_2k_discord---71c66328-03e3-4a39-839c-31b4afeae1ce.mp4",
+        "reference_or_prompt_receipt": "Discord message 1527874645850722365",
+        "license_status": "user-supplied; usage assumed for requested prototype"
+      },
+      "output": {
+        "path": "public/assets/aurel-water.mp4",
+        "format": "mp4/h264",
+        "width": 2560,
+        "height": 1440
+      },
+      "treatment": {
+        "desktop": "full-bleed cover, centered focal point",
+        "mobile": "portrait crop preserving central symbol and waterline",
+        "focal_point": "50% 48%",
+        "reduced_data_fallback": "poster frame",
+        "failure_fallback": "poster frame and dark background"
+      },
+      "validation_evidence": ["ffprobe: H.264, 2560x1440, 24fps, 5.04s, 3.06MB"]
+    },
+    {
+      "id": "hero-poster",
+      "section": "hero",
+      "role": "first frame and failed-video fallback",
+      "status": "approved",
+      "source_type": "extracted",
+      "provenance": {
+        "url_or_path": "/home/clawd/kling-hero-frame.png",
+        "reference_or_prompt_receipt": "Frame extracted at 2.5s from hero-video",
+        "license_status": "derived from user-supplied video"
+      },
+      "output": {
+        "path": "public/assets/aurel-water-poster.png",
+        "format": "png",
+        "width": 2560,
+        "height": 1440
+      },
+      "treatment": {
+        "desktop": "same cover crop as video",
+        "mobile": "same centered crop as video",
+        "focal_point": "50% 48%",
+        "reduced_data_fallback": "primary static visual",
+        "failure_fallback": "dark background remains readable"
+      },
+      "validation_evidence": ["Visually inspected: clear central symbol, water reflection intact"]
+    }
+  ]
+}
