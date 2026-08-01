@@ -40,13 +40,12 @@ jobs:
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
-        with:
-          version: 10
+        # version is auto-detected from 'packageManager' in package.json
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
           cache: "pnpm"
 
       - name: Install dependencies
@@ -56,7 +55,10 @@ jobs:
         run: npm audit --audit-level=high
 
       - name: Audit — Full report (informational)
-        run: npm audit --json > audit-report.json 2>&1 || true
+        run: |
+          # Always produce the file; npm audit exits non-zero when vulns found
+          npm audit --json 2>&1 | tee audit-report.json || true
+          echo "Audit report generated."
 
       - name: Upload audit report
         if: always()
