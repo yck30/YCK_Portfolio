@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react'
 interface ImageObject {
   src: string
   position: string
-  fit?: 'cover' | 'contain' | 'fill' | 'scale-down'
+  fit?: string | any
 }
 
 interface ProjectImageSliderProps {
