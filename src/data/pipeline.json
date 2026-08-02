@@ -1,0 +1,44 @@
+[
+  {
+    "id": "kitahost",
+    "title": "KitaHost",
+    "description": "Landing page hosting.",
+    "status": "Live",
+    "link": "#"
+  },
+  {
+    "id": "kitacreator",
+    "title": "KitaCreator",
+    "description": "Content creator and brand matchmaking.",
+    "status": "Coming Soon",
+    "link": null
+  },
+  {
+    "id": "kitaacademy",
+    "title": "KitaAcademy",
+    "description": "Learning Management System (LMS).",
+    "status": "Coming Soon",
+    "link": null
+  },
+  {
+    "id": "training",
+    "title": "Training",
+    "description": "Vibecoding, AI integration, and AI content creation for public and corporate audiences.",
+    "status": "Coming Soon",
+    "link": null
+  },
+  {
+    "id": "digital-marketing",
+    "title": "Digital Marketing & Video Production",
+    "description": "Landing page marketing and mobile video production.",
+    "status": "Coming Soon",
+    "link": null
+  },
+  {
+    "id": "custom-saas",
+    "title": "Custom SaaS for Corporate Pain Points",
+    "description": "Wishlist stage, not yet scoped.",
+    "status": "Exploring",
+    "link": null
+  }
+]

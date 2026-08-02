@@ -2,4 +2,6 @@ dist/
 node_modules/
 *.log
 *.tsbuildinfo
-
+.next/
+.env
+.env.local

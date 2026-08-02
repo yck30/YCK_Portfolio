@@ -23,19 +23,19 @@ Agents must not implement Icebox items without CK's written approval.
 - [x] Setup 5-layer agent infrastructure (`.agent/`)
 - [x] Create project documentation (README, BACKLOG, ARCHITECTURE, SECURITY)
 - [x] Rename branch `master` → `main`
-- [ ] Migrate from Vite to Next.js 14 App Router
-- [ ] Setup CSS design token system (custom properties)
-- [ ] Configure `next.config.js` with security headers
-- [ ] Create `.env.example` with all required variables
-- [ ] Setup Vercel deployment
+- [x] Migrate from Vite to Next.js 14 App Router
+- [x] Setup CSS design token system (custom properties)
+- [x] Configure `next.config.js` with security headers
+- [x] Create `.env.example` with all required variables
+- [x] Setup Vercel deployment
 
 ### Core Pages & Sections
 - [x] Hero section — Cinematic Liquid Editorial, GSAP choreography, MP4 background
-- [ ] Navigation — responsive, mobile hamburger, keyboard accessible
-- [ ] About section — CK's story, background, and what CK builds
-- [ ] Projects showcase — grid/list of key projects (KitaBuild, BIKIN INGAT, others)
-- [ ] Blog/writing section — listing page + individual post page (MDX)
-- [ ] Contact/inquiry form — Formspree integration, success/error states
+- [x] Navigation — responsive, mobile hamburger, keyboard accessible
+- [x] About section — CK's story, background, and what CK builds
+- [x] Projects showcase — grid/list of key projects (KitaBuild, BIKIN INGAT, others)
+- [x] Blog/writing section — listing page + individual post page (MDX)
+- [x] Contact/inquiry form — Formspree integration, success/error states
 
 ### Content & Data
 - [ ] Create `src/data/projects.json` with all showcase projects
