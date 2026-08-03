@@ -29,6 +29,7 @@ export function ProjectImageSlider({ images, alt }: ProjectImageSliderProps) {
   return (
     <div className="bento-image-wrapper">
       {images.map((img, idx) => (
+        /* eslint-disable-next-line @next/next/no-img-element */
         <img
           key={img.src}
           src={img.src}

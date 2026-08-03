@@ -5,15 +5,15 @@ import gsap from 'gsap'
 import { Navigation } from './Navigation'
 import { Contact } from './Contact'
 
+const images = [
+  { src: '/assets/Photo/Personal_1.JPG', position: 'center 15%' },
+  { src: '/assets/Photo/Personal_2.JPG', position: 'center 20%' },
+  { src: '/assets/Photo/Personal_3.JPG', position: 'center 20%' }
+]
+
 export function Hero() {
   const root = useRef<HTMLElement>(null)
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
-
-  const images = [
-    { src: '/assets/Photo/Personal_1.JPG', position: 'center 15%' },
-    { src: '/assets/Photo/Personal_2.JPG', position: 'center 20%' },
-    { src: '/assets/Photo/Personal_3.JPG', position: 'center 20%' }
-  ]
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -69,6 +69,7 @@ export function Hero() {
 
           <div className="hero-visual" data-motion="visual">
             {images.map((img, index) => (
+              /* eslint-disable-next-line @next/next/no-img-element */
               <img
                 key={img.src}
                 src={img.src}
