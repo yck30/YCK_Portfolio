@@ -33,6 +33,9 @@ importers:
       '@eslint/js':
         specifier: latest
         version: 10.0.1(eslint@8.57.1)
+      '@types/mdx':
+        specifier: ^2.0.14
+        version: 2.0.14
       '@types/node':
         specifier: ^20.0.0
         version: 20.19.43
