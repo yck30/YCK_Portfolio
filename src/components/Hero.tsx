@@ -6,19 +6,25 @@ import { Navigation } from './Navigation'
 import { Contact } from './Contact'
 
 const images = [
-  { src: '/assets/Photo/Personal_1.JPG', position: 'center 15%' },
-  { src: '/assets/Photo/Personal_2.JPG', position: 'center 20%' },
-  { src: '/assets/Photo/Personal_3.JPG', position: 'center 20%' }
+  { src: '/assets/Personal_1.JPG', position: 'center 15%' },
+  { src: '/assets/Personal_2.JPG', position: 'center 20%' },
+  { src: '/assets/Personal_3.JPG', position: 'center 20%' }
 ]
 
 export function Hero() {
   const root = useRef<HTMLElement>(null)
-  const [currentImageIndex, setCurrentImageIndex] = useState(0)
+  const [currentStep, setCurrentStep] = useState(0)
+  const [order, setOrder] = useState([0, 1, 2])
+
+  useEffect(() => {
+    // Randomize the starting order on the client side
+    setOrder([0, 1, 2].sort(() => Math.random() - 0.5))
+  }, [])
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentImageIndex((prev) => (prev + 1) % images.length)
-    }, 5000)
+      setCurrentStep((prev) => (prev + 1) % images.length)
+    }, 4500)
     return () => clearInterval(interval)
   }, [])
 
@@ -75,11 +81,11 @@ export function Hero() {
                 src={img.src}
                 alt={`CK Yong Portrait ${index + 1}`}
                 className="hero-video"
-                loading={index === 0 ? "eager" : "lazy"}
+                loading={index === order[currentStep] ? "eager" : "lazy"}
                 style={{ 
                   objectPosition: img.position,
-                  opacity: index === currentImageIndex ? 1 : 0,
-                  transition: 'opacity 1.5s ease-in-out'
+                  opacity: index === order[currentStep] ? 1 : 0,
+                  transition: 'opacity 1.2s ease-in-out'
                 }}
               />
             ))}

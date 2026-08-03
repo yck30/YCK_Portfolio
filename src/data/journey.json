@@ -1,38 +1,50 @@
 [
-  {
+   {
     "year": "2026–Present",
-    "title": "Founder",
+    "title": "Chief Strategy Officer (Founder)",
     "company": "KitaBuild LLP",
-    "description": "Founder of KitaBuild LLP."
+    "description": "Founding KitaBuild LLP to provide end-to-end product development services."
+  },
+  {
+    "year": "2026-Present",
+    "title": "Co-founder",
+    "company": "KitaBuild Community",
+    "description": "Co-founded a state-wide platform to democratize AI and vibecoding skills across Sabah."
   },
   {
     "year": "2026",
-    "title": "Full-Stack AI Development & Co-Founder",
-    "company": "Gamuda AI Academy (Sabah) / KitaBuild Community",
-    "description": "Full-Stack AI Development at Gamuda AI Academy (Sabah) and Co-Founder of KitaBuild Community."
+    "title": "Full-Stack AI Development",
+    "company": "Gamuda AI Academy (Sabah), Cohort 3",
+    "description": "Intensive 3-month program covering frontend, backend, database, cloud deployment, and AI integration."
   },
   {
-    "year": "2024-2026",
+    "year": "2024–2026",
     "title": "Executive Director & Co-Founder",
-    "company": "Singapore owned private company",
-    "description": "Executive Director & Co-Founder focused on industrial strategy."
+    "company": "Singapore-owned private company, Sabah",
+    "description": "Visioned and established a sustainable manufacturing company in Sabah, focusing on eco-friendly practices and community engagement."
   },
   {
     "year": "2024",
     "title": "Business Manager",
     "company": "Chinese-Sabah joint venture",
-    "description": "Business Manager for a Chinese-Sabah joint venture."
+    "description": "Embarked on mining and commodity trading."
   },
   {
     "year": "2019–2024",
     "title": "Business Development",
-    "company": "POIC Sabah",
-    "description": "Business Development at POIC Sabah — state industrial park & ports."
+    "company": "Sabah State-owned GLC",
+    "description": "Industrial park management and ports operations."
   },
   {
     "year": "2019",
     "title": "Bachelor of Economics (Hons)",
-    "company": "Universiti Malaysia Sabah / RMAF",
-    "description": "Bachelor of Economics (Hons), Universiti Malaysia Sabah; commissioned 2nd Lieutenant, RMAF (Volunteer Reserve)."
+    "company": "Universiti Malaysia Sabah",
+    "description": "Graduated with Honours, laying the analytical foundation for a career in strategy and business development"
+  },
+  {
+    "year": "2019",
+    "title": "Commissioned 2nd Lieutenant",
+    "company": "Royal Malaysian Air Force (Volunteer Reserve)",
+    "description": "Commissioned by the Crown Prince of Johor after completing military and tactical training"
   }
 ]

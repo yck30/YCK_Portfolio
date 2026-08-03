@@ -9,61 +9,63 @@ gsap.registerPlugin(ScrollTrigger)
 export function Journey() {
   const sectionRef = useRef<HTMLElement>(null)
 
+  const totalCards = journeyData.length
+  const rotationStep = 360 / totalCards
+  const radius = Math.max(850, (700 * totalCards) / (2 * Math.PI))
+
   useEffect(() => {
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     if (reduceMotion || !sectionRef.current) return
 
     const ctx = gsap.context(() => {
-      const totalCards = journeyData.length
-      const rotationStep = 120 
-      const yStep = 400
-
       gsap.set('.journey-track', { 
         transformStyle: 'preserve-3d',
         width: '100%',
         height: '100%',
-        position: 'absolute',
-        top: 0,
-        left: 0
+        position: 'relative',
+        z: -radius // Push the track back so the front card is perfectly at Z=0 (actual size)
       })
 
-      // The barber-pole scroll rotation
+      // Automatic continuous rotation
       gsap.to('.journey-track', {
-        rotationY: (totalCards - 1) * rotationStep,
-        y: -(totalCards - 1) * yStep,
+        rotationY: 360,
+        duration: totalCards * 6, // 6 seconds per card for a balanced reading pace
         ease: 'none',
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top top',
-          end: 'bottom bottom',
-          scrub: 1.5
+        repeat: -1,
+        onUpdate: function(this: any) {
+          const currentRotation = this.progress() * 360;
+          const cards = gsap.utils.toArray('.journey-card');
+          
+          cards.forEach((card: any, index: number) => {
+            const targetRotation = index * rotationStep;
+            
+            // Calculate shortest distance in degrees
+            let diff = Math.abs((currentRotation - targetRotation) % 360);
+            if (diff > 180) diff = 360 - diff;
+            
+            // Only fade in when it is the active or adjacent card
+            let opacity = 0;
+            if (diff < rotationStep) {
+              // Fades smoothly from 1 to 0 as it rotates away
+              opacity = 1 - (diff / rotationStep);
+            }
+            
+            gsap.set(card, { opacity });
+          });
         }
       })
 
-      // Parallax Galaxy Background
-      gsap.to('.galaxy-bg', {
-        y: '20%',
-        ease: 'none',
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top top',
-          end: 'bottom bottom',
-          scrub: 1.5
-        }
-      })
+      // Removing parallax from galaxy-bg to keep the SVG background fully framed without clipping
     }, sectionRef)
     return () => ctx.revert()
   }, [])
 
-  // Component to render the continuous galaxy ribbon
+  // Component to render the continuous galaxy ring
   const RibbonNodes = () => {
     return (
       <>
         {Array.from({ length: 140 }).map((_, i) => {
-          // Starts at +120 degrees to give a leading tail before Card 0
-          const angle = 120 - i * 15
-          // 120 degrees of drop = 400px of drop
-          const yPos = ((120 - angle) / 120) * 400 - 400
+          const angle = i * (360 / 140)
           
           return (
             <div
@@ -77,8 +79,8 @@ export function Journey() {
                 backgroundColor: '#d8b4fe',
                 borderRadius: '50%',
                 boxShadow: '0 0 15px 4px rgba(216, 180, 254, 0.5)',
-                transform: `translate(-50%, -50%) rotateY(${angle}deg) translateZ(350px) translateY(${yPos}px)`,
-                opacity: 0.5 + Math.random() * 0.5
+                transform: `translate(-50%, -50%) rotateY(${angle}deg) translateZ(${radius}px)`,
+                opacity: 0.15 + Math.random() * 0.3
               }}
             />
           )
@@ -87,19 +89,18 @@ export function Journey() {
     )
   }
 
-  // Calculate dynamic section height based on number of items to keep scroll speed smooth
-  const sectionHeight = `${journeyData.length * 150}vh`
+  // Normal section height since it's no longer scroll-based
+  const sectionHeight = '100vh'
 
   return (
     <section id="journey" className="journey-section" ref={sectionRef} style={{ height: sectionHeight, position: 'relative' }}>
       
-      {/* Sticky Camera Viewport */}
+      {/* Camera Viewport */}
       <div 
-        className="sticky-wrapper" 
+        className="viewport-wrapper" 
         style={{ 
-          position: 'sticky', 
-          top: 0, 
-          height: '100vh', 
+          position: 'relative', 
+          height: '100%', 
           overflow: 'hidden', 
           perspective: '1200px',
           display: 'flex',
@@ -112,15 +113,15 @@ export function Journey() {
           className="galaxy-bg"
           style={{
             position: 'absolute',
-            top: '-20%',
-            left: '-10%',
-            right: '-10%',
-            bottom: '-20%',
+            top: '0',
+            left: '0',
+            right: '0',
+            bottom: '0',
             zIndex: 0,
-            opacity: 0.35,
+            opacity: 0.15,
             pointerEvents: 'none',
-            backgroundImage: 'url(/assets/Photo/galaxy_background.png)',
-            backgroundSize: 'cover',
+            backgroundImage: 'url(/assets/My_Journey_Background.svg)',
+            backgroundSize: 'contain',
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat'
           }}
@@ -136,21 +137,21 @@ export function Journey() {
           <RibbonNodes />
           
           {journeyData.map((item, i) => {
-            const angle = -i * 120
-            const yPos = i * 400
+            const angle = -i * rotationStep
             
             return (
               <div 
                 key={i} 
                 className="journey-card" 
                 style={{ 
-                  width: '400px', 
-                  maxWidth: '85vw',
+                  width: '650px', 
+                  maxWidth: '90vw',
                   position: 'absolute',
                   top: '50%',
                   left: '50%',
-                  transform: `translate(-50%, -50%) rotateY(${angle}deg) translateZ(350px) translateY(${yPos}px)`,
-                  backfaceVisibility: 'hidden'
+                  transform: `translate(-50%, -50%) rotateY(${angle}deg) translateZ(${radius}px)`,
+                  backfaceVisibility: 'hidden',
+                  opacity: i === 0 ? 1 : 0
                 }}
               >
                 <div className="journey-year">{item.year}</div>
@@ -158,6 +159,24 @@ export function Journey() {
                   <h3>{item.title}</h3>
                   <span className="journey-company">{item.company}</span>
                   <p>{item.description}</p>
+                  {(item as any).link && (
+                    <a 
+                      href={(item as any).link} 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      style={{ 
+                        color: '#d8b4fe', 
+                        textDecoration: 'none', 
+                        fontWeight: '600', 
+                        marginTop: '12px', 
+                        display: 'inline-block',
+                        borderBottom: '1px solid rgba(216, 180, 254, 0.4)',
+                        paddingBottom: '2px'
+                      }}
+                    >
+                      View Live Website ↗
+                    </a>
+                  )}
                 </div>
               </div>
             )

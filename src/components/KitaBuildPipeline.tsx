@@ -17,7 +17,7 @@ export function KitaBuildPipeline() {
               <p>{item.description}</p>
               {item.link && (
                 <a href={item.link} className="pipeline-link" target="_blank" rel="noopener noreferrer">
-                  Visit {item.title} →
+                  {item.cta ? `${item.cta} →` : `Visit ${item.title} →`}
                 </a>
               )}
             </div>

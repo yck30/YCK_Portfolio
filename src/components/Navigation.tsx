@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Link from 'next/link'
 
 const Arrow = () => (
   <svg viewBox="0 0 24 24" aria-hidden="true" width="24" height="24">
@@ -13,17 +14,18 @@ export function Navigation() {
 
   return (
     <header className="topbar" data-motion="nav">
-      <a className="brand" href="#signal" aria-label="CK Yong home">
-        <span className="brand-mark">C</span>
+      <Link className="brand" href="/" aria-label="CK Yong home" onClick={() => setMenuOpen(false)}>
+        <span className="brand-mark">CK</span>
         <span>CK YONG</span>
-      </a>
+      </Link>
 
       <nav className={menuOpen ? 'nav-links is-open' : 'nav-links'} aria-label="Main navigation">
-        <a href="#studio" onClick={() => setMenuOpen(false)}>Studio</a>
-        <a href="#about" onClick={() => setMenuOpen(false)}>About</a>
-        <a href="#projects" onClick={() => setMenuOpen(false)}>Projects</a>
-        <a href="/blog" onClick={() => setMenuOpen(false)}>Blog</a>
-        <a href="#contact" onClick={() => setMenuOpen(false)}>Contact</a>
+        <Link href="/#about" onClick={() => setMenuOpen(false)}>About</Link>
+        <Link href="/#journey" onClick={() => setMenuOpen(false)}>Journey</Link>
+        <Link href="/#projects" onClick={() => setMenuOpen(false)}>Projects</Link>
+        <Link href="/credentials" onClick={() => setMenuOpen(false)}>Credentials</Link>
+        <Link href="/blog" onClick={() => setMenuOpen(false)}>Blog</Link>
+        <Link href="/#footer" onClick={() => setMenuOpen(false)}>Contact</Link>
       </nav>
 
       <button
@@ -37,7 +39,7 @@ export function Navigation() {
         <span />
       </button>
 
-      <a className="top-cta" href="#contact">Start a project <Arrow /></a>
+      <Link className="top-cta" href="/#contact">Start a project <Arrow /></Link>
     </header>
   )
 }

@@ -4,6 +4,7 @@ import { Projects } from '@/components/Projects'
 import { KitaBuildPipeline } from '@/components/KitaBuildPipeline'
 import { Journey } from '@/components/Journey'
 import { BlogPreview } from '@/components/BlogPreview'
+import { Footer } from '@/components/Footer'
 
 export default function Home() {
   return (
@@ -14,6 +15,7 @@ export default function Home() {
       <KitaBuildPipeline />
       <Journey />
       <BlogPreview />
+      <Footer />
     </main>
   )
 }

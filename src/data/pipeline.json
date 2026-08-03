@@ -1,44 +1,54 @@
 [
   {
+    "id": "devnable",
+    "title": "Devnable",
+    "description": "An interactive global directory mapping developer talent, agencies, and code products.",
+    "status": "LIVE",
+    "link": "https://www.devnable.space/map",
+    "cta": "Explore the Map"
+  },
+  {
     "id": "kitahost",
     "title": "KitaHost",
-    "description": "Landing page hosting.",
-    "status": "Live",
-    "link": "#"
+    "description": "Get a landing page live in days, not weeks — hosting handled, so you focus on the offer, not the server.",
+    "status": "LIVE",
+    "link": "https://kitabuild.com/saas"
+  },
+  {
+    "id": "digital-marketing",
+    "title": "Digital Marketing & Video Production",
+    "description": "1-page landing page plus a 2-minute mobile marketing video — RM 1,000 package.",
+    "status": "Available Now",
+    "cta": "Enquire via the KitaBuild website or get in touch above",
+    "link": "https://kitabuild.com/"
+  },
+  {
+    "id": "training",
+    "title": "Training",
+    "description": "Hands-on AI, vibecoding, digital marketing and content-creation training for teams and individuals who want to build.",
+    "status": "Ongoing",
+    "cta": "Enquire via the KitaBuild website or get in touch above",
+    "link": "https://kitabuild.com/"
   },
   {
     "id": "kitacreator",
     "title": "KitaCreator",
-    "description": "Content creator and brand matchmaking.",
+    "description": "Skip the cold-DM hunt for creators or brands — matched based on fit.",
     "status": "Coming Soon",
     "link": null
   },
   {
     "id": "kitaacademy",
     "title": "KitaAcademy",
-    "description": "Learning Management System (LMS).",
+    "description": "A structured LMS, go from curious to capable.",
     "status": "Coming Soon",
     "link": null
   },
   {
-    "id": "training",
-    "title": "Training",
-    "description": "Vibecoding, AI integration, and AI content creation for public and corporate audiences.",
+    "id": "custom-solutions",
+    "title": "Custom AI & Digital Solutions",
+    "description": "Custom AI-driven tools built around a specific corporate bottleneck, instead of forcing your process to fit off-the-shelf software.",
     "status": "Coming Soon",
-    "link": null
-  },
-  {
-    "id": "digital-marketing",
-    "title": "Digital Marketing & Video Production",
-    "description": "Landing page marketing and mobile video production.",
-    "status": "Coming Soon",
-    "link": null
-  },
-  {
-    "id": "custom-saas",
-    "title": "Custom SaaS for Corporate Pain Points",
-    "description": "Wishlist stage, not yet scoped.",
-    "status": "Exploring",
     "link": null
   }
 ]

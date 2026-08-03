@@ -38,7 +38,8 @@ export function ProjectImageSlider({ images, alt }: ProjectImageSliderProps) {
             objectPosition: img.position || 'center center',
             objectFit: img.fit || 'cover',
             opacity: idx === currentIndex ? 1 : 0,
-            zIndex: idx === currentIndex ? 1 : 0
+            zIndex: idx === currentIndex ? 1 : 0,
+            transition: 'opacity 1.2s ease-in-out'
           }}
         />
       ))}

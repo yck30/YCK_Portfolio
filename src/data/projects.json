@@ -11,8 +11,8 @@
       "Special thanks to ACS for supporting the community with space and venue"
     ],
     "images": [
-      { "src": "/assets/Photo/KitaBuild_Community_1.jpg", "position": "center 15%", "fit": "cover" },
-      { "src": "/assets/Photo/KitaBuild_Community_2.jpg", "position": "center 65%", "fit": "cover" }
+      { "src": "/assets/KitaBuild_Community_1.jpg", "position": "center 15%", "fit": "cover" },
+      { "src": "/assets/KitaBuild_Community_2.jpg", "position": "center 25%", "fit": "cover" }
     ],
     "link": "#"
   },
@@ -28,8 +28,8 @@
       "Built on Google Cloud Vision, Gemini, RAG, and Firebase"
     ],
     "images": [
-      { "src": "/assets/Photo/Bikin_Ingat_1.0-B2C-Portfolio.jpg", "position": "center 10%", "fit": "cover" },
-      { "src": "/assets/Photo/Bikin_Ingat-Team_404.jpg", "position": "center center", "fit": "cover" }
+      { "src": "/assets/Bikin_Ingat_Portfolio.jpg", "position": "center 10%", "fit": "cover" },
+      { "src": "/assets/Bikin_Ingat_Team_404.jpg", "position": "center 30%", "fit": "cover" }
     ],
     "link": "#"
   }
