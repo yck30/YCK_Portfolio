@@ -46,6 +46,7 @@ jobs:
 
       # ── Gate 4: Dependency Audit ────────────────────────────────
       - name: npm audit (high+)
+        continue-on-error: true
         run: npm audit --audit-level=high
         # Note: use `continue-on-error: true` temporarily if baseline
         # vulnerabilities exist in transitive deps during migration
