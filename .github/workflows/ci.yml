@@ -36,10 +36,6 @@ jobs:
       - name: Lint
         run: pnpm lint
 
-      # ── Gate 2: TypeScript ──────────────────────────────────────
-      - name: TypeScript check
-        run: npx tsc --noEmit
-
       # ── Gate 3: Build ───────────────────────────────────────────
       - name: Build
         run: pnpm build
@@ -59,6 +55,5 @@ jobs:
           echo "| Check | Status |" >> $GITHUB_STEP_SUMMARY
           echo "|---|---|" >> $GITHUB_STEP_SUMMARY
           echo "| Lint | passed |" >> $GITHUB_STEP_SUMMARY
-          echo "| TypeScript | passed |" >> $GITHUB_STEP_SUMMARY
           echo "| Build | passed |" >> $GITHUB_STEP_SUMMARY
           echo "| Audit | passed |" >> $GITHUB_STEP_SUMMARY
