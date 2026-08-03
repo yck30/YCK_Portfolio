@@ -38,25 +38,26 @@ Agents must not implement Icebox items without CK's written approval.
 - [x] Contact/inquiry form — Formspree integration, success/error states
 
 ### Content & Data
-- [ ] Create `src/data/projects.json` with all showcase projects
-- [ ] Create `src/data/social.json` with 5 platform links
-- [ ] Create `src/data/about.json` with profile content
-- [ ] Write first 1–2 blog posts (MDX)
-- [ ] Add project screenshots/thumbnails to `public/assets/`
+- [x] Create `src/data/projects.json` with all showcase projects
+- [x] Create `src/data/social.json` with 5 platform links
+- [x] Create `src/data/about.json` with profile content
+- [x] Write first 1–2 blog posts (MDX)
+- [x] Add project screenshots/thumbnails to `public/assets/`
 
-### Social Links (5 Platforms)
-- [ ] GitHub: https://github.com/yck30
-- [ ] LinkedIn: (URL from CK)
-- [ ] Twitter/X: (URL from CK)
-- [ ] Instagram: (URL from CK)
-- [ ] (5th platform — confirm with CK)
+### Social Links (Implemented in Footer)
+- [x] GitHub: https://github.com/yck30
+- [x] LinkedIn: https://www.linkedin.com/in/chunkityong
+- [x] TikTok: https://www.tiktok.com/@yck96
+- [x] Instagram: https://www.instagram.com/ck_yong96/
+- [x] Threads: https://www.threads.com/@ck_yong96
+- [x] Facebook: https://web.facebook.com/YCK96/
 
 ### Quality & Launch
-- [ ] Lighthouse mobile score ≥ 85
-- [ ] axe-core: 0 critical violations
-- [ ] All Playwright E2E tests passing (desktop + mobile + reduced-motion)
-- [ ] `npm audit --audit-level=high` passes
-- [ ] Security headers configured
+- [x] Lighthouse mobile score ≥ 85 (Optimized via next/image and CSS)
+- [x] axe-core: 0 critical violations
+- [x] All Playwright E2E tests passing (desktop + mobile + reduced-motion)
+- [x] `pnpm audit --audit-level=high` passes (handled via overrides)
+- [x] Security headers configured
 - [ ] Phase 1 production deploy to Vercel
 
 ---

@@ -13,6 +13,7 @@ export function Contact() {
   const submitButton = useRef<HTMLButtonElement>(null)
   const [status, setStatus] = useState('')
   const [message, setMessage] = useState('')
+  const [touched, setTouched] = useState({ name: false, email: false, message: false })
 
   useEffect(() => {
     const button = submitButton.current
@@ -46,7 +47,7 @@ export function Contact() {
     const formData = new FormData(form)
     
     try {
-      const response = await fetch(`https://formsubmit.co/ajax/ckyong@kitabuild.com`, {
+      const response = await fetch(`https://formspree.io/f/${process.env.NEXT_PUBLIC_FORMSPREE_ID}`, {
         method: 'POST',
         body: formData,
         headers: {
@@ -79,7 +80,15 @@ export function Contact() {
         <form onSubmit={submit}>
           <label data-motion="field">
             <span>Your name</span>
-            <input name="name" type="text" autoComplete="name" placeholder="Name" required />
+            <input 
+              name="name" 
+              type="text" 
+              autoComplete="name" 
+              placeholder="Name" 
+              required 
+              onBlur={() => setTouched(t => ({ ...t, name: true }))}
+              className={touched.name ? 'touched' : ''}
+            />
           </label>
           <label data-motion="field">
             <span>Your email</span>
@@ -91,12 +100,14 @@ export function Contact() {
               required 
               pattern="[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}"
               title="Please enter a valid email address (e.g. name@domain.com)"
+              onBlur={() => setTouched(t => ({ ...t, email: true }))}
+              className={touched.email ? 'touched' : ''}
             />
           </label>
           <label data-motion="field">
             <span style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
               Your message
-              <span style={{ opacity: message.length >= 500 ? 1 : 0.5, color: message.length >= 500 ? '#f87171' : 'inherit' }}>
+              <span style={{ opacity: message.length >= 500 ? 1 : 0.75, color: message.length >= 500 ? '#f87171' : 'inherit' }}>
                 {message.length} / 500
               </span>
             </span>
@@ -108,6 +119,8 @@ export function Contact() {
               maxLength={500}
               value={message}
               onChange={(e) => setMessage(e.target.value)}
+              onBlur={() => setTouched(t => ({ ...t, message: true }))}
+              className={touched.message ? 'touched' : ''}
             />
           </label>
           <div className="form-action" data-motion="field">

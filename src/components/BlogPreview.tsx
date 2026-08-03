@@ -12,6 +12,11 @@ export function BlogPreview() {
             <h3>Merging Strategy & Motion</h3>
             <p>Exploring how tactile motion design influences user conversion paths.</p>
           </a>
+          <a href="/blog/second-post" className="blog-card">
+            <span className="blog-date">Aug 04, 2026</span>
+            <h3>The Power of Server Components</h3>
+            <p>Why Next.js Server Components are perfect for blazing fast portfolio sites.</p>
+          </a>
         </div>
       </div>
     </section>

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
+import Image from 'next/image'
 import { Navigation } from './Navigation'
 import { Contact } from './Contact'
 
@@ -75,17 +76,19 @@ export function Hero() {
 
           <div className="hero-visual" data-motion="visual">
             {images.map((img, index) => (
-              /* eslint-disable-next-line @next/next/no-img-element */
-              <img
+              <Image
                 key={img.src}
                 src={img.src}
                 alt={`CK Yong Portrait ${index + 1}`}
                 className="hero-video"
-                loading={index === order[currentStep] ? "eager" : "lazy"}
+                fill
+                priority={index === 0}
+                sizes="(max-width: 768px) 100vw, 480px"
                 style={{ 
                   objectPosition: img.position,
                   opacity: index === order[currentStep] ? 1 : 0,
-                  transition: 'opacity 1.2s ease-in-out'
+                  transition: 'opacity 1.2s ease-in-out',
+                  objectFit: 'cover'
                 }}
               />
             ))}
