@@ -53,12 +53,12 @@ jobs:
 
       - name: Audit — Critical & High
         continue-on-error: true
-        run: npm audit --audit-level=high
+        run: pnpm audit --audit-level=high
 
       - name: Audit — Full report (informational)
         run: |
-          # Always produce the file; npm audit exits non-zero when vulns found
-          npm audit --json 2>&1 | tee audit-report.json || true
+          # Always produce the file; pnpm audit exits non-zero when vulns found
+          pnpm audit --json 2>&1 | tee audit-report.json || true
           echo "Audit report generated."
 
       - name: Upload audit report
