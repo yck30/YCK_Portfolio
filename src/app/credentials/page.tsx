@@ -82,11 +82,13 @@ export default function CredentialsPage() {
       <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, overflow: 'hidden', zIndex: -1, pointerEvents: 'none' }}>
         {/* Commissioned 2nd Lieutenant */}
         <div style={{ position: 'absolute', top: '5%', left: '-5%', width: '45vw', minWidth: '350px', opacity: 0.18, transform: 'rotate(-4deg)', filter: 'grayscale(35%)' }}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/assets/Commissioned_2nd_Lieutenant.jpeg" alt="" style={{ width: '100%', height: 'auto', borderRadius: '32px', objectFit: 'cover' }} />
         </div>
 
         {/* Gamuda Trophy */}
         <div style={{ position: 'absolute', bottom: '-2%', right: '-8%', width: '55vw', minWidth: '450px', opacity: 0.22, transform: 'rotate(6deg)', filter: 'grayscale(25%) blur(1px)' }}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/assets/Gamuda_AI_Academy-2nd_Runner_up_Trophy.jpg" alt="" style={{ width: '100%', height: 'auto', borderRadius: '40px', objectFit: 'cover' }} />
         </div>
 
@@ -128,6 +130,7 @@ export default function CredentialsPage() {
               ['--moveY' as string]: `${moveY}px`,
               animation: `floatX ${durX}s ease-in-out infinite alternate ${delay}s`
             }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={src} alt="" style={{ width: '100%', height: 'auto', animation: `floatY ${durY}s ease-in-out infinite alternate ${delay}s` }} />
             </div>
           );

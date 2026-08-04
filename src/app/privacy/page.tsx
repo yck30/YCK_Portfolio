@@ -39,7 +39,7 @@ export default function PrivacyPage() {
               
               <h3 style={{ fontSize: '1.2rem', marginBottom: '0.5rem', marginTop: '1.5rem', color: '#fff' }}>Contact Form (Formspree)</h3>
               <p>
-                When you use the "Get in touch" form, you are asked to provide your <strong>Name</strong>, <strong>Email Address</strong>, and a <strong>Message</strong>. This data is securely processed by Formspree. It is used strictly for the purpose of receiving and responding to your direct inquiries.
+                When you use the &quot;Get in touch&quot; form, you are asked to provide your <strong>Name</strong>, <strong>Email Address</strong>, and a <strong>Message</strong>. This data is securely processed by Formspree. It is used strictly for the purpose of receiving and responding to your direct inquiries.
               </p>
 
               <h3 style={{ fontSize: '1.2rem', marginBottom: '0.5rem', marginTop: '1.5rem', color: '#fff' }}>Newsletter (Buttondown)</h3>

@@ -58,7 +58,7 @@ export function Journey() {
       // Removing parallax from galaxy-bg to keep the SVG background fully framed without clipping
     }, sectionRef)
     return () => ctx.revert()
-  }, [])
+  }, [radius, rotationStep, totalCards])
 
   // Component to render the continuous galaxy ring
   const RibbonNodes = () => {
