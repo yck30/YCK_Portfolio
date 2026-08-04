@@ -49,8 +49,9 @@ export function Footer() {
       className="section-padding" 
       style={{ 
         borderTop: '1px solid rgba(255, 255, 255, 0.05)', 
-        backgroundColor: 'rgba(0,0,0,0.2)',
+        backgroundColor: 'var(--color-bg)',
         position: 'relative',
+        zIndex: 10,
         overflow: 'hidden'
       }}
     >
