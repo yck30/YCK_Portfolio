@@ -1,13 +1,16 @@
 import { Navigation } from '@/components/Navigation'
+import { BackButton } from '@/components/BackButton'
+import { Footer } from '@/components/Footer'
 
 export default function BlogIndex() {
   return (
     <main className="page-shell section-padding">
       <Navigation />
       <div className="container" style={{ maxWidth: '800px', marginTop: '80px' }}>
+        <BackButton href="/" label="Back to Home" />
         <h1 style={{ fontFamily: 'Instrument Serif', fontSize: '64px', marginBottom: '24px' }}>Writing</h1>
         <p style={{ color: 'var(--muted)', fontSize: '18px', marginBottom: '48px' }}>
-          Thoughts on design, engineering, and building products.
+          Thoughts on design, engineering, entrepreneurship, and building products.
         </p>
 
         <div className="blog-list" style={{ display: 'grid', gap: '40px' }}>
@@ -28,6 +31,7 @@ export default function BlogIndex() {
           </a>
         </div>
       </div>
+      <Footer />
     </main>
   )
 }

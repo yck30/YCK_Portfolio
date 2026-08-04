@@ -85,8 +85,10 @@ export function Footer() {
             <a href="https://web.facebook.com/YCK96/" target="_blank" rel="noopener noreferrer" className="footer-link">Facebook</a>
           </div>
 
-          <div style={{ marginTop: '3rem', color: 'rgba(255,255,255,0.65)', fontSize: '0.875rem' }}>
-            &copy; {new Date().getFullYear()} CK Yong. All rights reserved.
+          <div style={{ marginTop: '3rem', color: 'rgba(255,255,255,0.65)', fontSize: '0.875rem', display: 'flex', gap: '1rem', flexWrap: 'wrap', justifyContent: 'center' }}>
+            <span>&copy; {new Date().getFullYear()} CK Yong. All rights reserved.</span>
+            <span style={{ opacity: 0.5 }}>|</span>
+            <a href="/privacy" className="footer-link" style={{ color: 'inherit', textDecoration: 'underline', textUnderlineOffset: '4px' }}>Privacy Policy</a>
           </div>
         </div>
       </div>

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Navigation } from '@/components/Navigation';
+import { BackButton } from '@/components/BackButton';
 import { Footer } from '@/components/Footer';
 
 export const metadata = {
@@ -139,6 +140,7 @@ export default function CredentialsPage() {
       <section className="section-padding">
         <div className="container">
           <header style={{ maxWidth: '600px', marginBottom: '4rem', position: 'relative' }}>
+            <BackButton href="/" label="Back to Home" />
             <h1 style={{ marginBottom: '1rem', fontSize: 'clamp(40px, 5vw, 64px)', textShadow: '0 4px 24px rgba(0,0,0,0.5)' }}>Credentials</h1>
             <p style={{ color: 'var(--muted)', fontSize: 'clamp(16px, 1.5vw, 20px)', lineHeight: 1.6, margin: 0, textShadow: '0 2px 12px rgba(0,0,0,0.8)' }}>
               A chronologically arranged record of my academic background, professional certifications, and technical qualifications.

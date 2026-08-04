@@ -1,8 +1,12 @@
 import { Navigation } from '@/components/Navigation'
+import { BackButton } from '@/components/BackButton'
+import { Footer } from '@/components/Footer'
 
 <Navigation />
 
-<div className="container page-shell section-padding" style={{ maxWidth: '800px', marginTop: '80px' }}>
+<div className="container section-padding" style={{ maxWidth: '800px', margin: '0 auto', paddingTop: '160px' }}>
+
+<BackButton href="/blog" label="Back to Writing" />
 
 # The Power of Server Components
 
@@ -22,3 +26,5 @@ When building a portfolio, performance is key. First impressions matter, and a s
 *More thoughts on this coming soon!*
 
 </div>
+
+<Footer />

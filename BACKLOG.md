@@ -35,6 +35,7 @@ Agents must not implement Icebox items without CK's written approval.
 - [x] About section — CK's story, background, and what CK builds
 - [x] Projects showcase — grid/list of key projects (KitaBuild, BIKIN INGAT, others)
 - [x] Blog/writing section — listing page + individual post page (MDX)
+- [x] Credentials page — immersive scattered layout with digital badges
 - [x] Contact/inquiry form — Formspree integration, success/error states
 
 ### Content & Data
@@ -58,16 +59,16 @@ Agents must not implement Icebox items without CK's written approval.
 - [x] All Playwright E2E tests passing (desktop + mobile + reduced-motion)
 - [x] `pnpm audit --audit-level=high` passes (handled via overrides)
 - [x] Security headers configured
-- [ ] Phase 1 production deploy to Vercel
 
 ---
 
 ## 🟡 Phase 2 — Should Have (Post-Phase 1)
 
 ### Analytics & Growth
-- [ ] Google Analytics 4 integration
+- [x] Privacy policy page (required before GA4 + newsletter)
+- [ ] Google Analytics 4 integration (`.env` configuration)
 - [ ] Buttondown newsletter signup integration
-- [ ] Privacy policy page (required before GA4 + newsletter)
+- [ ] Official Production Deploy to Vercel (Combined Phase 1 & 2 features)
 
 ### Enhanced Features
 - [ ] Blog post search / filter by tag

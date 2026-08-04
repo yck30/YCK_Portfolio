@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-08-04 (Credentials & UI Polish)
+
+- **Credentials Page**: Created a dedicated page detailing academic background, certifications, and technical qualifications.
+- **Glassmorphism UI**: Designed an immersive pipeline grid using frosted glass layouts (`backdrop-filter`) for premium readability.
+- **Dynamic Background**: Integrated a hardware-accelerated scattered background composition using CSS Lissajous curves to animate 24 digital badges and key achievement portraits without JavaScript overhead.
+- **Footer Fix**: Upgraded the global Footer to an opaque background to properly block fixed layouts and act as a visual anchor.
+- **Blog Update**: Updated the blog description to include "entrepreneurship".
+
 ## 2026-08-01 (CI/CD Governance)
 
 - Created `.github/workflows/ci.yml` — GitHub Actions CI gate (lint → typecheck → build → npm audit).
