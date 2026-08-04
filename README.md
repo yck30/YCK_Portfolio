@@ -12,7 +12,7 @@
 
 | Environment | URL | Status |
 |---|---|---|
-| Production | TBD (Vercel) | 🔧 In development |
+| Production | https://yck-portfolio.vercel.app/ | 🟢 Live |
 | Staging | TBD (Dokploy) | 🔧 In development |
 
 ---
@@ -80,8 +80,10 @@ Copy `.env.example` to `.env` and fill in the values:
 
 ```bash
 # Required for Phase 2 (leave blank for Phase 1)
-NEXT_PUBLIC_GA4_MEASUREMENT_ID=   # Google Analytics 4
+NEXT_PUBLIC_GA4_MEASUREMENT_ID=    # Google Analytics 4
 FORMSPREE_ID=                      # Formspree form ID
+NEXT_PUBLIC_FORMSPREE_ID=          # Formspree form ID (public)
+BUTTONDOWN_API_KEY=                # Buttondown newsletter API key
 ```
 
 > ⚠️ Never commit `.env` to git. It is gitignored.

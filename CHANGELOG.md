@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-08-05 (Phase 2 Integrations & Vercel Deploy)
+
+- **Vercel Deployment**: Officially deployed the production build to Vercel (`https://yck-portfolio.vercel.app/`).
+- **Buttondown Integration**: Built a secure Server Action to subscribe users to the newsletter via Buttondown's API. Added a `<Newsletter />` component to the bottom of the blog index page.
+- **Google Analytics 4**: Integrated GA4 tracking across the Next.js App Router using `@next/third-parties/google`.
+- **Privacy Policy**: Added a Privacy Policy page outlining tracking, Formspree data collection, and newsletter subscription terms.
+
 ## 2026-08-04 (Credentials & UI Polish)
 
 - **Credentials Page**: Created a dedicated page detailing academic background, certifications, and technical qualifications.
