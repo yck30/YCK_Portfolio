@@ -66,7 +66,7 @@ Agents must not implement Icebox items without CK's written approval.
 
 ### Analytics & Growth
 - [x] Privacy policy page (required before GA4 + newsletter)
-- [x] Google Analytics 4 integration (`.env` configuration)
+- [ ] Google Analytics 4 integration (`.env` configuration)
 - [ ] Buttondown newsletter signup integration
 - [ ] Official Production Deploy to Vercel (Combined Phase 1 & 2 features)
 
