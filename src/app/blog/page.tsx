@@ -1,6 +1,7 @@
 import { Navigation } from '@/components/Navigation'
 import { BackButton } from '@/components/BackButton'
 import { Footer } from '@/components/Footer'
+import { Newsletter } from '@/components/Newsletter'
 
 export default function BlogIndex() {
   return (
@@ -30,6 +31,8 @@ export default function BlogIndex() {
             </p>
           </a>
         </div>
+        
+        <Newsletter />
       </div>
       <Footer />
     </main>
