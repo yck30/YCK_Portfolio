@@ -1,0 +1,16 @@
+[
+  {
+    "id": "merging-strategy-motion",
+    "slug": "first-post",
+    "date": "Aug 02, 2026",
+    "title": "Merging Strategy & Motion",
+    "excerpt": "Exploring how tactile motion design influences user conversion paths."
+  },
+  {
+    "id": "power-of-server-components",
+    "slug": "second-post",
+    "date": "Aug 04, 2026",
+    "title": "The Power of Server Components",
+    "excerpt": "Why Next.js Server Components are perfect for blazing fast portfolio sites."
+  }
+]
