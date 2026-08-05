@@ -153,15 +153,15 @@ export default function CredentialsPage() {
           <style dangerouslySetInnerHTML={{__html: `
             .credential-card {
               transition: transform 0.4s var(--ease), box-shadow 0.4s var(--ease), border-color 0.4s var(--ease);
-              background: rgba(10, 13, 18, 0.45) !important;
+              background: var(--color-glass) !important;
               backdrop-filter: blur(16px);
               -webkit-backdrop-filter: blur(16px);
-              border: 1px solid rgba(255, 255, 255, 0.06);
+              border: 1px solid var(--color-hairline);
             }
             .credential-card:hover {
               transform: translateY(-4px);
-              border-color: rgba(255, 255, 255, 0.15);
-              box-shadow: 0 20px 40px -10px rgba(0,0,0,0.5), 0 0 40px rgba(255,255,255,0.03) inset;
+              border-color: var(--color-paper);
+              box-shadow: 0 20px 40px -10px rgba(0,0,0,0.1);
             }
             @keyframes floatX {
               0% { transform: translateX(0); }
@@ -183,8 +183,8 @@ export default function CredentialsPage() {
                   {section.items.map((item, itemIdx) => (
                     <div key={itemIdx} style={{ display: 'flex', justifyContent: 'space-between', gap: '1.5rem', alignItems: 'flex-start' }}>
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                        <h3 style={{ fontSize: '1rem', fontWeight: 500, margin: 0, lineHeight: 1.4, color: '#fff' }}>{item.title}</h3>
-                        {item.issuer && <span style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.6875rem', textTransform: 'uppercase', letterSpacing: '0.12em', fontWeight: 600 }}>{item.issuer}</span>}
+                        <h3 style={{ fontSize: '1rem', fontWeight: 500, margin: 0, lineHeight: 1.4, color: 'var(--color-paper)' }}>{item.title}</h3>
+                        {item.issuer && <span style={{ color: 'var(--color-muted)', fontSize: '0.6875rem', textTransform: 'uppercase', letterSpacing: '0.12em', fontWeight: 600 }}>{item.issuer}</span>}
                       </div>
                       <div style={{ color: 'var(--muted)', fontFamily: 'var(--font-display)', fontSize: '1.125rem', whiteSpace: 'nowrap', opacity: 0.8 }}>
                         {item.year}

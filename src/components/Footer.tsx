@@ -48,7 +48,7 @@ export function Footer() {
       ref={footerRef}
       className="section-padding" 
       style={{ 
-        borderTop: '1px solid rgba(255, 255, 255, 0.05)', 
+        borderTop: '1px solid var(--color-hairline)', 
         backgroundColor: 'var(--color-bg)',
         position: 'relative',
         zIndex: 10,
@@ -85,7 +85,7 @@ export function Footer() {
             <a href="https://web.facebook.com/YCK96/" target="_blank" rel="noopener noreferrer" className="footer-link">Facebook</a>
           </div>
 
-          <div style={{ marginTop: '3rem', color: 'rgba(255,255,255,0.65)', fontSize: '0.875rem', display: 'flex', gap: '1rem', flexWrap: 'wrap', justifyContent: 'center' }}>
+          <div style={{ marginTop: '3rem', color: 'var(--color-muted)', fontSize: '0.875rem', display: 'flex', gap: '1rem', flexWrap: 'wrap', justifyContent: 'center' }}>
             <span>&copy; {new Date().getFullYear()} CK Yong. All rights reserved.</span>
             <span style={{ opacity: 0.5 }}>|</span>
             <a href="/privacy" className="footer-link" style={{ color: 'inherit', textDecoration: 'underline', textUnderlineOffset: '4px' }}>Privacy Policy</a>

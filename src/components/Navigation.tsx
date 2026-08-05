@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import { ThemeToggle } from './ThemeToggle'
 
 const Arrow = () => (
   <svg viewBox="0 0 24 24" aria-hidden="true" width="24" height="24">
@@ -39,7 +40,10 @@ export function Navigation() {
         <span />
       </button>
 
-      <Link className="top-cta" href="/#contact">Start a project <Arrow /></Link>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginLeft: 'auto' }}>
+        <ThemeToggle />
+        <Link className="top-cta" href="/#contact">Start a project <Arrow /></Link>
+      </div>
     </header>
   )
 }
