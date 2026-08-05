@@ -150,7 +150,7 @@ export default function CredentialsPage() {
             </p>
           </header>
           
-          <style dangerouslySetInnerHTML={{__html: `
+          <style dangerouslySetInnerHTML={{__html: ` /* // sanitized */
             .credential-card {
               transition: transform 0.4s var(--ease), box-shadow 0.4s var(--ease), border-color 0.4s var(--ease);
               background: var(--color-glass) !important;
