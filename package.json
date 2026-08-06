@@ -32,8 +32,8 @@
     "@types/node": "^20.0.0",
     "@types/react": "latest",
     "@types/react-dom": "latest",
-    "eslint": "^8.0.0",
-    "eslint-config-next": "^14.2.24",
+    "eslint": "^10.8.0",
+    "eslint-config-next": "^16.2.12",
     "typescript": "5.9.3",
     "typescript-eslint": "latest"
   },
