@@ -6,6 +6,8 @@ import { Journey } from '@/components/Journey'
 import { BlogPreview } from '@/components/BlogPreview'
 import { Footer } from '@/components/Footer'
 
+export const revalidate = 0;
+
 export default function Home() {
   return (
     <main className="page-shell">

@@ -3,9 +3,16 @@ import { Navigation } from '@/components/Navigation'
 import { BackButton } from '@/components/BackButton'
 import { Footer } from '@/components/Footer'
 import { Newsletter } from '@/components/Newsletter'
-import posts from '@/data/blog.json'
+import { createClient } from '@/utils/supabase/server'
+import { BlogListClient } from './BlogListClient'
 
-export default function BlogIndex() {
+export const revalidate = 0;
+
+export default async function BlogIndex() {
+  const supabase = createClient()
+  const { data: posts } = await supabase.from('blog_posts').select('*').order('published_at', { ascending: false })
+  const safePosts = posts || [];
+
   return (
     <main className="page-shell section-padding">
       <Navigation />
@@ -16,22 +23,7 @@ export default function BlogIndex() {
           Thoughts on design, engineering, entrepreneurship, and building products.
         </p>
 
-        <div className="editorial-list">
-          {posts.map((post) => (
-            <Link key={post.id} href={`/blog/${post.slug}`} className="editorial-item">
-              <span className="editorial-date">{post.date}</span>
-              <div className="editorial-content">
-                <h2 className="editorial-title">
-                  {post.title}
-                  <span className="editorial-arrow">→</span>
-                </h2>
-                <p className="editorial-excerpt">
-                  {post.excerpt}
-                </p>
-              </div>
-            </Link>
-          ))}
-        </div>
+        <BlogListClient posts={safePosts} />
         
         <div className="page-separator"></div>
         <Newsletter />

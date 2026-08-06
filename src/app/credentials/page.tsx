@@ -115,8 +115,8 @@ export default function CredentialsPage() {
           const moveX = (pseudoRand(i + 500) - 0.5) * 120; 
           const moveY = (pseudoRand(i + 600) - 0.5) * 160; 
           
-          const durX = 15 + pseudoRand(i + 700) * 30; // 15s to 45s
-          const durY = 19 + pseudoRand(i + 800) * 35; // 19s to 54s (Prime offsets for non-repeating Lissajous curves)
+          const durX = 10 + pseudoRand(i + 700) * 15; // 10s to 25s
+          const durY = 13 + pseudoRand(i + 800) * 18; // 13s to 31s (Prime offsets for non-repeating Lissajous curves)
           const delay = pseudoRand(i + 900) * -40;
           
           return (

@@ -89,6 +89,8 @@ export function Footer() {
             <span>&copy; {new Date().getFullYear()} CK Yong. All rights reserved.</span>
             <span style={{ opacity: 0.5 }}>|</span>
             <a href="/privacy" className="footer-link" style={{ color: 'inherit', textDecoration: 'underline', textUnderlineOffset: '4px' }}>Privacy Policy</a>
+            <span style={{ opacity: 0.5 }}>|</span>
+            <a href="/admin/login" className="footer-link" style={{ color: 'inherit', textDecoration: 'underline', textUnderlineOffset: '4px' }}>Admin Panel</a>
           </div>
         </div>
       </div>

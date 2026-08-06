@@ -71,15 +71,14 @@ Agents must not implement Icebox items without CK's written approval.
 - [x] Official Production Deploy to Vercel (Combined Phase 1 & 2 features)
 
 ### Enhanced Features
-- [ ] Blog post search / filter by tag
-- [ ] Dark/light mode toggle
-- [ ] Project detail pages (individual project deep-dives)
-- [ ] Reading progress indicator on blog posts
-- [ ] Estimated read time on blog cards
+- [x] Blog post search / filter by tag
+- [x] Dark/light mode toggle
+- [x] Project detail pages (individual project deep-dives)
+- [x] Reading progress indicator on blog posts
+- [x] Estimated read time on blog cards
 
 ### Auth & CMS (Supabase)
-- [ ] Supabase project setup
-- [ ] Admin panel for content management (no more git-only content updates)
+- [ ] Supabase project setup & Admin panel for content management (no more git-only content updates)
 
 ---
 
