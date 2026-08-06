@@ -78,7 +78,7 @@ Agents must not implement Icebox items without CK's written approval.
 - [x] Estimated read time on blog cards
 
 ### Auth & CMS (Supabase)
-- [ ] Supabase project setup & Admin panel for content management (no more git-only content updates)
+- [x] Supabase project setup & Admin panel for content management (no more git-only content updates)
 
 ---
 

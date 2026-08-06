@@ -13,7 +13,7 @@
 | Environment | URL | Status |
 |---|---|---|
 | Production | https://yck-portfolio.vercel.app/ | 🟢 Live |
-| Staging | TBD (Dokploy) | 🔧 In development |
+| Staging | Vercel Preview URLs | 🔄 Automatic per-branch |
 
 ---
 
