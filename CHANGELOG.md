@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-08-06 (Phase 2 Auth & CMS - Supabase)
+
+- **Supabase Integration**: Set up Supabase PostgreSQL database for managing Projects and Blog Posts.
+- **Server Components**: Migrated Next.js components to fetch dynamic content directly from Supabase via `createServerClient`.
+- **Admin Dashboard**: Created an authenticated `/admin` portal with login functionality to manage CMS data without code commits.
+- **Dynamic Caching**: Disabled Next.js static caching for dynamic pages to ensure the CMS content serves fresh updates immediately.
+
 ## 2026-08-05 (Phase 2 Integrations & Vercel Deploy)
 
 - **Vercel Deployment**: Officially deployed the production build to Vercel (`https://yck-portfolio.vercel.app/`).
