@@ -46,6 +46,12 @@ export default async function ProjectDetail({ params }: { params: { slug: string
           </p>
         </header>
 
+        {project.content && (
+          <div style={{ marginBottom: '64px', fontSize: '18px', color: 'var(--color-paper)', lineHeight: 1.6, whiteSpace: 'pre-wrap', maxWidth: '800px' }}>
+            {project.content}
+          </div>
+        )}
+
         {project.images && project.images.length > 0 && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '32px', marginBottom: '64px' }}>
             {project.images.map((img: any, idx: number) => (

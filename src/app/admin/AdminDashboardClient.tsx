@@ -3,11 +3,19 @@
 import { useState } from 'react'
 import { createClient } from '@/utils/supabase/client'
 import { useRouter } from 'next/navigation'
+import { AdminFormModal } from '@/components/AdminFormModal'
 
 export function AdminDashboardClient({ initialProjects, initialBlogPosts }: { initialProjects: any[], initialBlogPosts: any[] }) {
   const [activeTab, setActiveTab] = useState<'projects' | 'blog'>('projects')
   const [projects, setProjects] = useState(initialProjects)
   const [blogPosts, setBlogPosts] = useState(initialBlogPosts)
+  
+  // Modal state
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [modalMode, setModalMode] = useState<'add' | 'edit'>('add')
+  const [modalType, setModalType] = useState<'project' | 'blog'>('project')
+  const [editingItem, setEditingItem] = useState<any>(null)
+  
   const supabase = createClient()
   const router = useRouter()
 
@@ -30,6 +38,50 @@ export function AdminDashboardClient({ initialProjects, initialBlogPosts }: { in
       router.refresh()
     } else {
       alert('Error deleting post: ' + error.message)
+    }
+  }
+
+  const handleOpenAddProject = () => {
+    setModalType('project')
+    setModalMode('add')
+    setEditingItem(null)
+    setIsModalOpen(true)
+  }
+
+  const handleOpenEditProject = (project: any) => {
+    setModalType('project')
+    setModalMode('edit')
+    setEditingItem(project)
+    setIsModalOpen(true)
+  }
+
+  const handleOpenAddPost = () => {
+    setModalType('blog')
+    setModalMode('add')
+    setEditingItem(null)
+    setIsModalOpen(true)
+  }
+
+  const handleOpenEditPost = (post: any) => {
+    setModalType('blog')
+    setModalMode('edit')
+    setEditingItem(post)
+    setIsModalOpen(true)
+  }
+
+  const handleModalSuccess = (data: any) => {
+    if (modalType === 'project') {
+      if (modalMode === 'add') {
+        setProjects([...projects, data])
+      } else {
+        setProjects(projects.map(p => p.id === data.id ? data : p))
+      }
+    } else {
+      if (modalMode === 'add') {
+        setBlogPosts([data, ...blogPosts])
+      } else {
+        setBlogPosts(blogPosts.map(p => p.id === data.id ? data : p))
+      }
     }
   }
 
@@ -62,8 +114,7 @@ export function AdminDashboardClient({ initialProjects, initialBlogPosts }: { in
         <div>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
             <h2>Projects ({projects.length})</h2>
-            {/* Future improvement: Add new project form modal */}
-            <button style={{ padding: '8px 16px', background: 'var(--color-paper)', color: 'var(--color-bg)', borderRadius: '6px', border: 'none', cursor: 'pointer' }}>
+            <button onClick={handleOpenAddProject} style={{ padding: '8px 16px', background: 'var(--color-paper)', color: 'var(--color-bg)', borderRadius: '6px', border: 'none', cursor: 'pointer' }}>
               + Add Project
             </button>
           </div>
@@ -75,7 +126,7 @@ export function AdminDashboardClient({ initialProjects, initialBlogPosts }: { in
                   <p style={{ margin: 0, color: 'var(--color-muted)', fontSize: '14px' }}>{p.role} · ID: {p.id}</p>
                 </div>
                 <div style={{ display: 'flex', gap: '8px' }}>
-                  <button style={{ padding: '6px 12px', background: 'transparent', border: '1px solid var(--color-hairline)', color: 'var(--color-paper)', borderRadius: '4px', cursor: 'pointer' }}>Edit</button>
+                  <button onClick={() => handleOpenEditProject(p)} style={{ padding: '6px 12px', background: 'transparent', border: '1px solid var(--color-hairline)', color: 'var(--color-paper)', borderRadius: '4px', cursor: 'pointer' }}>Edit</button>
                   <button onClick={() => handleDeleteProject(p.id)} style={{ padding: '6px 12px', background: 'rgba(255,0,0,0.1)', border: '1px solid red', color: 'red', borderRadius: '4px', cursor: 'pointer' }}>Delete</button>
                 </div>
               </div>
@@ -88,8 +139,7 @@ export function AdminDashboardClient({ initialProjects, initialBlogPosts }: { in
         <div>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
             <h2>Blog Posts ({blogPosts.length})</h2>
-            {/* Future improvement: Add new post form modal */}
-            <button style={{ padding: '8px 16px', background: 'var(--color-paper)', color: 'var(--color-bg)', borderRadius: '6px', border: 'none', cursor: 'pointer' }}>
+            <button onClick={handleOpenAddPost} style={{ padding: '8px 16px', background: 'var(--color-paper)', color: 'var(--color-bg)', borderRadius: '6px', border: 'none', cursor: 'pointer' }}>
               + Add Post
             </button>
           </div>
@@ -101,13 +151,24 @@ export function AdminDashboardClient({ initialProjects, initialBlogPosts }: { in
                   <p style={{ margin: 0, color: 'var(--color-muted)', fontSize: '14px' }}>Slug: {p.slug} · Read time: {p.read_time}</p>
                 </div>
                 <div style={{ display: 'flex', gap: '8px' }}>
-                  <button style={{ padding: '6px 12px', background: 'transparent', border: '1px solid var(--color-hairline)', color: 'var(--color-paper)', borderRadius: '4px', cursor: 'pointer' }}>Edit</button>
+                  <button onClick={() => handleOpenEditPost(p)} style={{ padding: '6px 12px', background: 'transparent', border: '1px solid var(--color-hairline)', color: 'var(--color-paper)', borderRadius: '4px', cursor: 'pointer' }}>Edit</button>
                   <button onClick={() => handleDeletePost(p.id)} style={{ padding: '6px 12px', background: 'rgba(255,0,0,0.1)', border: '1px solid red', color: 'red', borderRadius: '4px', cursor: 'pointer' }}>Delete</button>
                 </div>
               </div>
             ))}
           </div>
         </div>
+      )}
+
+      {isModalOpen && (
+        <AdminFormModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          mode={modalMode}
+          type={modalType}
+          initialData={editingItem}
+          onSuccess={handleModalSuccess}
+        />
       )}
     </div>
   )
