@@ -81,6 +81,18 @@ export default function LoginPage() {
         >
           {loading ? 'Signing in...' : 'Sign In'}
         </button>
+        <a 
+          href="/" 
+          style={{ 
+            textAlign: 'center', 
+            fontSize: '14px', 
+            color: 'var(--color-muted)', 
+            textDecoration: 'underline', 
+            marginTop: '8px' 
+          }}
+        >
+          Back to Home
+        </a>
       </form>
     </div>
   )

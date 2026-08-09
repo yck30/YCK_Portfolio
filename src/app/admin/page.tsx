@@ -22,8 +22,21 @@ export default async function AdminPage() {
         <h1 style={{ fontSize: '32px', margin: 0, fontFamily: 'var(--font-primary)' }}>CMS Dashboard</h1>
         <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
           <span style={{ color: 'var(--color-muted)', fontSize: '14px' }}>Logged in as {user.email}</span>
-          <Link href="/" style={{ color: 'var(--color-paper)', textDecoration: 'underline', fontSize: '14px' }}>
-            View Site
+          <Link 
+            href="/" 
+            style={{ 
+              color: 'var(--color-paper)', 
+              textDecoration: 'none', 
+              border: '1px solid var(--color-hairline)',
+              padding: '6px 12px',
+              borderRadius: '6px',
+              fontSize: '14px',
+              transition: 'background-color 0.2s',
+            }}
+            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--color-glass)'}
+            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+          >
+            Back to Home
           </Link>
           <form action="/auth/signout" method="post">
             <button type="submit" style={{ background: 'transparent', border: '1px solid var(--color-hairline)', color: 'var(--color-paper)', padding: '6px 12px', borderRadius: '6px', cursor: 'pointer', fontSize: '14px' }}>
