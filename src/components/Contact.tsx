@@ -57,6 +57,15 @@ export function Contact() {
       
       if (response.ok) {
         setStatus('Request received — we’ll be in touch shortly.')
+        
+        // Send a confirmation receipt via Resend
+        try {
+          const { sendContactConfirmation } = await import('@/app/actions/contact')
+          await sendContactConfirmation(formData)
+        } catch (emailErr) {
+          console.error('Failed to dispatch contact confirmation email:', emailErr)
+        }
+
         form.reset()
         setMessage('')
       } else {
