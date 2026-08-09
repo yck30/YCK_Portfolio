@@ -30,11 +30,8 @@ export default async function AdminPage() {
               border: '1px solid var(--color-hairline)',
               padding: '6px 12px',
               borderRadius: '6px',
-              fontSize: '14px',
-              transition: 'background-color 0.2s',
+              fontSize: '14px'
             }}
-            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--color-glass)'}
-            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
           >
             Back to Home
           </Link>
