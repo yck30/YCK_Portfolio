@@ -21,7 +21,6 @@ export async function subscribeToNewsletter(formData: FormData) {
       },
       body: JSON.stringify({
         email_address: email,
-        type: 'unactivated',
       }),
     })
 
