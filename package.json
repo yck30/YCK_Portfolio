@@ -27,16 +27,18 @@
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.12.1",
-    "@eslint/js": "latest",
+    "@eslint/js": "8.57.1",
     "@playwright/test": "^1.62.1",
     "@types/mdx": "^2.0.14",
     "@types/node": "^20.0.0",
     "@types/react": "latest",
     "@types/react-dom": "latest",
-    "eslint": "^8.0.0",
+    "eslint": "8.57.1",
     "eslint-config-next": "^14.2.24",
-    "typescript": "5.9.3",
-    "typescript-eslint": "latest"
+    "typescript": "5.9.3"
+  },
+  "overrides": {
+    "eslint": "8.57.1"
   },
   "resolutions": {
     "postcss": "^8.5.18",
