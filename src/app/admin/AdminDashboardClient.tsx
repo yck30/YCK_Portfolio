@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { createClient } from '@/utils/supabase/client'
 import { useRouter } from 'next/navigation'
 import { AdminFormModal } from '@/components/AdminFormModal'
+import { ConfirmModal } from '@/components/ConfirmModal'
 
 export function AdminDashboardClient({ initialProjects, initialBlogPosts }: { initialProjects: any[], initialBlogPosts: any[] }) {
   const [activeTab, setActiveTab] = useState<'projects' | 'blog'>('projects')
@@ -15,29 +16,39 @@ export function AdminDashboardClient({ initialProjects, initialBlogPosts }: { in
   const [modalMode, setModalMode] = useState<'add' | 'edit'>('add')
   const [modalType, setModalType] = useState<'project' | 'blog'>('project')
   const [editingItem, setEditingItem] = useState<any>(null)
+
+  // Confirm modal state
+  const [deleteTarget, setDeleteTarget] = useState<{ type: 'project' | 'blog'; id: string; title: string } | null>(null)
+  const [isDeleting, setIsDeleting] = useState(false)
   
   const supabase = createClient()
   const router = useRouter()
 
-  const handleDeleteProject = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this project?')) return
-    const { error } = await supabase.from('projects').delete().eq('id', id)
-    if (!error) {
-      setProjects(projects.filter(p => p.id !== id))
-      router.refresh()
-    } else {
-      alert('Error deleting project: ' + error.message)
-    }
-  }
+  const handleConfirmDelete = async () => {
+    if (!deleteTarget) return
+    setIsDeleting(true)
 
-  const handleDeletePost = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this blog post?')) return
-    const { error } = await supabase.from('blog_posts').delete().eq('id', id)
-    if (!error) {
-      setBlogPosts(blogPosts.filter(p => p.id !== id))
-      router.refresh()
-    } else {
-      alert('Error deleting post: ' + error.message)
+    try {
+      if (deleteTarget.type === 'project') {
+        const { error } = await supabase.from('projects').delete().eq('id', deleteTarget.id)
+        if (!error) {
+          setProjects(projects.filter(p => p.id !== deleteTarget.id))
+          router.refresh()
+        } else {
+          alert('Error deleting project: ' + error.message)
+        }
+      } else {
+        const { error } = await supabase.from('blog_posts').delete().eq('id', deleteTarget.id)
+        if (!error) {
+          setBlogPosts(blogPosts.filter(p => p.id !== deleteTarget.id))
+          router.refresh()
+        } else {
+          alert('Error deleting post: ' + error.message)
+        }
+      }
+    } finally {
+      setIsDeleting(false)
+      setDeleteTarget(null)
     }
   }
 
@@ -114,20 +125,39 @@ export function AdminDashboardClient({ initialProjects, initialBlogPosts }: { in
         <div>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
             <h2>Projects ({projects.length})</h2>
-            <button onClick={handleOpenAddProject} style={{ padding: '8px 16px', background: 'var(--color-paper)', color: 'var(--color-bg)', borderRadius: '6px', border: 'none', cursor: 'pointer' }}>
+            <button 
+              onClick={handleOpenAddProject} 
+              style={{ padding: '8px 16px', background: 'var(--color-paper)', color: 'var(--color-bg)', borderRadius: '6px', border: 'none', cursor: 'pointer', fontWeight: 600, transition: 'transform 160ms ease-out' }}
+              onMouseDown={(e) => (e.currentTarget.style.transform = 'scale(0.96)')}
+              onMouseUp={(e) => (e.currentTarget.style.transform = 'scale(1)')}
+            >
               + Add Project
             </button>
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
             {projects.map(p => (
-              <div key={p.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px', border: '1px solid var(--color-hairline)', borderRadius: '8px', background: 'var(--color-glass)' }}>
+              <div key={p.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 20px', border: '1px solid var(--color-hairline)', borderRadius: '12px', background: 'var(--color-glass)', transition: 'border-color 0.2s ease' }}>
                 <div>
-                  <h3 style={{ margin: '0 0 4px 0' }}>{p.title}</h3>
+                  <h3 style={{ margin: '0 0 4px 0', fontSize: '18px', fontWeight: 600 }}>{p.title}</h3>
                   <p style={{ margin: 0, color: 'var(--color-muted)', fontSize: '14px' }}>{p.role} · ID: {p.id}</p>
                 </div>
                 <div style={{ display: 'flex', gap: '8px' }}>
-                  <button onClick={() => handleOpenEditProject(p)} style={{ padding: '6px 12px', background: 'transparent', border: '1px solid var(--color-hairline)', color: 'var(--color-paper)', borderRadius: '4px', cursor: 'pointer' }}>Edit</button>
-                  <button onClick={() => handleDeleteProject(p.id)} style={{ padding: '6px 12px', background: 'rgba(255,0,0,0.1)', border: '1px solid red', color: 'red', borderRadius: '4px', cursor: 'pointer' }}>Delete</button>
+                  <button 
+                    onClick={() => handleOpenEditProject(p)} 
+                    style={{ padding: '6px 14px', background: 'transparent', border: '1px solid var(--color-hairline)', color: 'var(--color-paper)', borderRadius: '6px', cursor: 'pointer', fontSize: '13px', transition: 'transform 160ms ease-out' }}
+                    onMouseDown={(e) => (e.currentTarget.style.transform = 'scale(0.96)')}
+                    onMouseUp={(e) => (e.currentTarget.style.transform = 'scale(1)')}
+                  >
+                    Edit
+                  </button>
+                  <button 
+                    onClick={() => setDeleteTarget({ type: 'project', id: p.id, title: p.title })} 
+                    style={{ padding: '6px 14px', background: 'rgba(239, 68, 68, 0.12)', border: '1px solid rgba(239, 68, 68, 0.4)', color: '#ef4444', borderRadius: '6px', cursor: 'pointer', fontSize: '13px', transition: 'transform 160ms ease-out' }}
+                    onMouseDown={(e) => (e.currentTarget.style.transform = 'scale(0.96)')}
+                    onMouseUp={(e) => (e.currentTarget.style.transform = 'scale(1)')}
+                  >
+                    Delete
+                  </button>
                 </div>
               </div>
             ))}
@@ -139,20 +169,39 @@ export function AdminDashboardClient({ initialProjects, initialBlogPosts }: { in
         <div>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
             <h2>Blog Posts ({blogPosts.length})</h2>
-            <button onClick={handleOpenAddPost} style={{ padding: '8px 16px', background: 'var(--color-paper)', color: 'var(--color-bg)', borderRadius: '6px', border: 'none', cursor: 'pointer' }}>
+            <button 
+              onClick={handleOpenAddPost} 
+              style={{ padding: '8px 16px', background: 'var(--color-paper)', color: 'var(--color-bg)', borderRadius: '6px', border: 'none', cursor: 'pointer', fontWeight: 600, transition: 'transform 160ms ease-out' }}
+              onMouseDown={(e) => (e.currentTarget.style.transform = 'scale(0.96)')}
+              onMouseUp={(e) => (e.currentTarget.style.transform = 'scale(1)')}
+            >
               + Add Post
             </button>
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
             {blogPosts.map(p => (
-              <div key={p.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px', border: '1px solid var(--color-hairline)', borderRadius: '8px', background: 'var(--color-glass)' }}>
+              <div key={p.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 20px', border: '1px solid var(--color-hairline)', borderRadius: '12px', background: 'var(--color-glass)', transition: 'border-color 0.2s ease' }}>
                 <div>
-                  <h3 style={{ margin: '0 0 4px 0' }}>{p.title}</h3>
+                  <h3 style={{ margin: '0 0 4px 0', fontSize: '18px', fontWeight: 600 }}>{p.title}</h3>
                   <p style={{ margin: 0, color: 'var(--color-muted)', fontSize: '14px' }}>Slug: {p.slug} · Read time: {p.read_time}</p>
                 </div>
                 <div style={{ display: 'flex', gap: '8px' }}>
-                  <button onClick={() => handleOpenEditPost(p)} style={{ padding: '6px 12px', background: 'transparent', border: '1px solid var(--color-hairline)', color: 'var(--color-paper)', borderRadius: '4px', cursor: 'pointer' }}>Edit</button>
-                  <button onClick={() => handleDeletePost(p.id)} style={{ padding: '6px 12px', background: 'rgba(255,0,0,0.1)', border: '1px solid red', color: 'red', borderRadius: '4px', cursor: 'pointer' }}>Delete</button>
+                  <button 
+                    onClick={() => handleOpenEditPost(p)} 
+                    style={{ padding: '6px 14px', background: 'transparent', border: '1px solid var(--color-hairline)', color: 'var(--color-paper)', borderRadius: '6px', cursor: 'pointer', fontSize: '13px', transition: 'transform 160ms ease-out' }}
+                    onMouseDown={(e) => (e.currentTarget.style.transform = 'scale(0.96)')}
+                    onMouseUp={(e) => (e.currentTarget.style.transform = 'scale(1)')}
+                  >
+                    Edit
+                  </button>
+                  <button 
+                    onClick={() => setDeleteTarget({ type: 'blog', id: p.id, title: p.title })} 
+                    style={{ padding: '6px 14px', background: 'rgba(239, 68, 68, 0.12)', border: '1px solid rgba(239, 68, 68, 0.4)', color: '#ef4444', borderRadius: '6px', cursor: 'pointer', fontSize: '13px', transition: 'transform 160ms ease-out' }}
+                    onMouseDown={(e) => (e.currentTarget.style.transform = 'scale(0.96)')}
+                    onMouseUp={(e) => (e.currentTarget.style.transform = 'scale(1)')}
+                  >
+                    Delete
+                  </button>
                 </div>
               </div>
             ))}
@@ -170,6 +219,17 @@ export function AdminDashboardClient({ initialProjects, initialBlogPosts }: { in
           onSuccess={handleModalSuccess}
         />
       )}
+
+      <ConfirmModal
+        isOpen={deleteTarget !== null}
+        title={`Delete ${deleteTarget?.type === 'project' ? 'Project' : 'Blog Post'}`}
+        message={`Are you sure you want to delete "${deleteTarget?.title}"? This operation cannot be undone.`}
+        confirmText="Delete"
+        isDanger={true}
+        isSubmitting={isDeleting}
+        onConfirm={handleConfirmDelete}
+        onClose={() => setDeleteTarget(null)}
+      />
     </div>
   )
 }

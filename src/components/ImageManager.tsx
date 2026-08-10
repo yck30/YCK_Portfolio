@@ -20,50 +20,45 @@ interface ImageManagerProps {
 export function ImageManager({
   images = [],
   onChange,
-  label = "Photos & Media Gallery",
+  label = "Uploaded Photos / Screenshots",
   bucketName = "portfolio-images"
 }: ImageManagerProps) {
   const [uploading, setUploading] = useState(false)
   const [deletingIndex, setDeletingIndex] = useState<number | null>(null)
+  const [deleteTargetIndex, setDeleteTargetIndex] = useState<number | null>(null)
   const supabase = createClient()
 
-  // Helper to extract file path from public Supabase URL if not stored explicitly
+  // Helper to extract storage path from full Supabase CDN URL
   const getStoragePathFromUrl = (url: string): string | null => {
-    try {
-      if (!url) return null;
-      // standard url pattern: /storage/v1/object/public/bucketName/filePath
-      const marker = `/storage/v1/object/public/${bucketName}/`;
-      if (url.includes(marker)) {
-        return url.split(marker)[1];
-      }
-      // fallback if last path segment is filename
-      const urlObj = new URL(url);
-      const pathname = urlObj.pathname;
-      const parts = pathname.split('/');
-      return parts[parts.length - 1];
-    } catch {
-      return null;
+    if (!url) return null
+    const marker = `/storage/v1/object/public/${bucketName}/`
+    if (url.includes(marker)) {
+      return url.split(marker)[1]
     }
+    return null
   }
 
   const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files ? Array.from(e.target.files) : []
-    if (files.length === 0) return
-    setUploading(true)
+    const files = e.target.files
+    if (!files || files.length === 0) return
 
+    setUploading(true)
     try {
       const uploadedItems: ImageItem[] = []
 
-      for (const file of files) {
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i]
         const fileExt = file.name.split('.').pop()
-        const fileName = `${Date.now()}_${Math.random().toString(36).substring(2, 8)}.${fileExt}`
+        const fileName = `${Math.random()}.${fileExt}`
         const filePath = `${fileName}`
 
         const { error: uploadError } = await supabase.storage
           .from(bucketName)
-          .upload(filePath, file, { cacheControl: '3600', upsert: true })
+          .upload(filePath, file)
 
-        if (uploadError) throw uploadError
+        if (uploadError) {
+          throw uploadError
+        }
 
         const { data: { publicUrl } } = supabase.storage
           .from(bucketName)
@@ -71,9 +66,9 @@ export function ImageManager({
 
         uploadedItems.push({
           src: publicUrl,
-          filePath: filePath,
           position: 'center 15%',
-          fit: 'contain'
+          fit: 'contain',
+          filePath: filePath
         })
       }
 
@@ -87,13 +82,17 @@ export function ImageManager({
     }
   }
 
-  const handleDelete = async (index: number) => {
+  const confirmDelete = async () => {
+    if (deleteTargetIndex === null) return
+    const index = deleteTargetIndex
     const itemToDelete = images[index]
-    if (!itemToDelete) return
-
-    if (!confirm('Are you sure you want to delete this photo?')) return
+    if (!itemToDelete) {
+      setDeleteTargetIndex(null)
+      return
+    }
 
     setDeletingIndex(index)
+    setDeleteTargetIndex(null)
 
     try {
       const pathToDelete = itemToDelete.filePath || getStoragePathFromUrl(itemToDelete.src)
@@ -212,7 +211,7 @@ export function ImageManager({
                 {/* Delete Button Overlay */}
                 <button
                   type="button"
-                  onClick={() => handleDelete(idx)}
+                  onClick={() => setDeleteTargetIndex(idx)}
                   disabled={deletingIndex === idx}
                   title="Delete Photo"
                   style={{
@@ -231,9 +230,11 @@ export function ImageManager({
                     alignItems: 'center',
                     gap: '4px',
                     boxShadow: '0 2px 4px rgba(0,0,0,0.3)',
-                    transition: 'transform 0.1s ease',
+                    transition: 'transform 0.16s ease-out, background 0.16s ease-out',
                     zIndex: 2
                   }}
+                  onMouseDown={(e) => (e.currentTarget.style.transform = 'scale(0.95)')}
+                  onMouseUp={(e) => (e.currentTarget.style.transform = 'scale(1)')}
                 >
                   {deletingIndex === idx ? '...' : '🗑 Delete'}
                 </button>
@@ -297,6 +298,16 @@ export function ImageManager({
           ))}
         </div>
       )}
+
+      <ConfirmModal
+        isOpen={deleteTargetIndex !== null}
+        title="Delete Photo"
+        message="Are you sure you want to permanently delete this photo from storage?"
+        confirmText="Delete"
+        isDanger={true}
+        onConfirm={confirmDelete}
+        onClose={() => setDeleteTargetIndex(null)}
+      />
     </div>
   )
 }

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { createClient } from '@/utils/supabase/client'
 import { useRouter } from 'next/navigation'
 import { ImageManager } from '@/components/ImageManager'
@@ -22,6 +22,22 @@ export function AdminFormModal({
   const router = useRouter()
   const [formData, setFormData] = useState(initialData || {})
   const [isSubmitting, setIsSubmitting] = useState(false)
+
+  useEffect(() => {
+    if (!isOpen) return
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose()
+      } else if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+        const formElement = document.getElementById('admin-form-element') as HTMLFormElement
+        if (formElement) {
+          formElement.requestSubmit()
+        }
+      }
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [isOpen, onClose])
 
   if (!isOpen) return null
 
@@ -77,7 +93,7 @@ export function AdminFormModal({
       <div style={{ background: 'var(--color-bg)', padding: '32px', borderRadius: '12px', width: '100%', maxWidth: '600px', maxHeight: '90vh', overflowY: 'auto', border: '1px solid var(--color-hairline)' }}>
         <h2 style={{ marginTop: 0 }}>{mode === 'add' ? 'Add' : 'Edit'} {type === 'project' ? 'Project' : 'Blog Post'}</h2>
         
-        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+        <form id="admin-form-element" onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
           
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
             <label style={{ fontSize: '14px', color: 'var(--color-paper)', fontWeight: 500 }}>ID / Slug</label>
@@ -146,11 +162,28 @@ export function AdminFormModal({
             <textarea name="content" value={formData.content || ''} onChange={handleChange} rows={8} style={{ padding: '8px 12px', borderRadius: '6px', background: 'var(--color-glass)', color: 'var(--color-paper)', border: '1px solid var(--color-hairline)', fontFamily: 'monospace', outline: 'none' }} />
           </div>
 
-          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '16px', marginTop: '16px' }}>
-            <button type="button" onClick={onClose} style={{ padding: '8px 16px', background: 'transparent', border: '1px solid var(--color-hairline)', color: 'var(--color-paper)', borderRadius: '6px', cursor: 'pointer' }}>Cancel</button>
-            <button type="submit" disabled={isSubmitting} style={{ padding: '8px 16px', background: 'var(--color-paper)', border: 'none', color: 'var(--color-bg)', borderRadius: '6px', cursor: 'pointer', fontWeight: 600 }}>
-              {isSubmitting ? 'Saving...' : 'Save'}
-            </button>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '16px' }}>
+            <span style={{ fontSize: '12px', color: 'var(--color-muted)' }}>💡 Press Esc to cancel · Ctrl+Enter to save</span>
+            <div style={{ display: 'flex', gap: '12px' }}>
+              <button 
+                type="button" 
+                onClick={onClose} 
+                style={{ padding: '8px 16px', background: 'transparent', border: '1px solid var(--color-hairline)', color: 'var(--color-paper)', borderRadius: '6px', cursor: 'pointer', transition: 'transform 160ms ease-out' }}
+                onMouseDown={(e) => (e.currentTarget.style.transform = 'scale(0.96)')}
+                onMouseUp={(e) => (e.currentTarget.style.transform = 'scale(1)')}
+              >
+                Cancel
+              </button>
+              <button 
+                type="submit" 
+                disabled={isSubmitting} 
+                style={{ padding: '8px 16px', background: 'var(--color-paper)', border: 'none', color: 'var(--color-bg)', borderRadius: '6px', cursor: 'pointer', fontWeight: 600, transition: 'transform 160ms ease-out, opacity 160ms ease-out', opacity: isSubmitting ? 0.7 : 1 }}
+                onMouseDown={(e) => (e.currentTarget.style.transform = 'scale(0.96)')}
+                onMouseUp={(e) => (e.currentTarget.style.transform = 'scale(1)')}
+              >
+                {isSubmitting ? 'Saving...' : 'Save'}
+              </button>
+            </div>
           </div>
         </form>
       </div>
