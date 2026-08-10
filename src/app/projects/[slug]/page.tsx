@@ -79,7 +79,8 @@ export default async function ProjectDetail({ params }: { params: { slug: string
         {project.images && project.images.length > 0 && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '32px', marginBottom: '64px' }}>
             {project.images.map((img: any, idx: number) => {
-              const fitMode = typeof img === 'object' && img.fit ? img.fit : 'contain';
+              const isCover = typeof img === 'object' && img.fit === 'cover';
+              const fitMode = isCover ? 'cover' : 'contain';
               const src = typeof img === 'string' ? img : img.src;
               return (
                 <div 

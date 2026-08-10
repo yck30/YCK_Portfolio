@@ -29,17 +29,20 @@ export function ProjectImageSlider({ images, alt }: ProjectImageSliderProps) {
   return (
     <div className="bento-image-wrapper">
       {images.map((img, idx) => {
-        const isContain = img.fit === 'contain';
+        const isCover = typeof img === 'object' && img.fit === 'cover';
+        const fitMode = isCover ? 'cover' : 'contain';
+        const src = typeof img === 'string' ? img : img.src;
+
         return (
           /* eslint-disable-next-line @next/next/no-img-element */
           <img
-            key={img.src || idx}
-            src={typeof img === 'string' ? img : img.src}
+            key={src || idx}
+            src={src}
             alt={alt || ""}
             style={{
-              objectPosition: img.position || 'center 15%',
-              objectFit: (img.fit as any) || 'cover',
-              padding: isContain ? '12px' : '0',
+              objectPosition: img.position || (isCover ? 'center 15%' : 'center'),
+              objectFit: fitMode,
+              padding: fitMode === 'contain' ? '12px' : '0',
               opacity: idx === currentIndex ? 1 : 0,
               zIndex: idx === currentIndex ? 1 : 0,
               transition: 'opacity 1.2s ease-in-out, transform 0.8s ease'
