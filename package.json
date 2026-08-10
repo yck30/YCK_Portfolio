@@ -2,13 +2,16 @@
   "name": "aurel-liquid-hero",
   "private": true,
   "version": "0.1.0",
-  "packageManager": "pnpm@10.33.2",
+  "packageManager": "pnpm@9.15.0",
   "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
+  },
+  "engines": {
+    "node": "20.x"
   },
   "dependencies": {
     "@mdx-js/loader": "^3.0.1",
