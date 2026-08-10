@@ -265,8 +265,8 @@ export function ImageManager({
                       outline: 'none'
                     }}
                   >
-                    <option value="contain" style={{ background: '#111' }}>Full Original (Contain)</option>
-                    <option value="cover" style={{ background: '#111' }}>Crop to Fill (Cover)</option>
+                    <option value="contain" style={{ background: 'var(--color-bg)', color: 'var(--color-paper)' }}>Full Original (Contain)</option>
+                    <option value="cover" style={{ background: 'var(--color-bg)', color: 'var(--color-paper)' }}>Crop to Fill (Cover)</option>
                   </select>
                 </div>
 
@@ -286,10 +286,10 @@ export function ImageManager({
                       outline: 'none'
                     }}
                   >
-                    <option value="center 15%" style={{ background: '#111' }}>Top Focus (15%)</option>
-                    <option value="center 25%" style={{ background: '#111' }}>Upper-Center (25%)</option>
-                    <option value="center" style={{ background: '#111' }}>Center</option>
-                    <option value="center 85%" style={{ background: '#111' }}>Bottom Focus (85%)</option>
+                    <option value="center 15%" style={{ background: 'var(--color-bg)', color: 'var(--color-paper)' }}>Top Focus (15%)</option>
+                    <option value="center 25%" style={{ background: 'var(--color-bg)', color: 'var(--color-paper)' }}>Upper-Center (25%)</option>
+                    <option value="center" style={{ background: 'var(--color-bg)', color: 'var(--color-paper)' }}>Center</option>
+                    <option value="center 85%" style={{ background: 'var(--color-bg)', color: 'var(--color-paper)' }}>Bottom Focus (85%)</option>
                   </select>
                 </div>
               </div>

@@ -9,7 +9,7 @@
   --color-glass: rgba(10, 13, 18, 0.46);
   --color-accent: #d8b4fe;
   --color-accent-hover: #f3e8ff;
-  --color-spotlight: rgba(216, 180, 254, 0.08);
+  --color-spotlight: rgba(216, 180, 254, 0.16);
   --color-hero-bg: #06090d;
 
   /* Typography */
@@ -29,12 +29,12 @@
 [data-theme='light'] {
   --color-bg: #f5f7fa;
   --color-paper: #020305;
-  --color-muted: rgba(10, 13, 18, 0.70);
-  --color-hairline: rgba(10, 13, 18, 0.18);
-  --color-glass: rgba(245, 247, 250, 0.46);
+  --color-muted: rgba(10, 13, 18, 0.75);
+  --color-hairline: rgba(10, 13, 18, 0.15);
+  --color-glass: rgba(255, 255, 255, 0.82);
   --color-accent: #6b21a8;
   --color-accent-hover: #4c1d95;
-  --color-spotlight: rgba(107, 33, 168, 0.08);
+  --color-spotlight: rgba(147, 51, 234, 0.24);
   --color-hero-bg: #e2e8f0;
 }
 
@@ -313,12 +313,12 @@ input.touched:invalid:focus, textarea.touched:invalid:focus {
 .bento-role { font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); }
 .bento-content p { margin: 0; color: var(--muted); font-size: 15px; line-height: 1.6; }
 .bento-features { list-style: none; padding: 0; margin: 20px 0 0; display: flex; flex-wrap: wrap; gap: 8px; }
-.bento-features li { font-size: 11px; padding: 6px 14px; border: 1px solid var(--hairline); border-radius: 99px; background: rgba(255,255,255,0.03); }
+.bento-features li { font-size: 11px; padding: 6px 14px; border: 1px solid var(--color-hairline); border-radius: 99px; background: var(--color-glass); color: var(--color-paper); }
 
 /* Blog Preview & Index */
 .blog-preview-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 48px; }
 .view-all { font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); border-bottom: 1px solid var(--hairline); padding-bottom: 4px; transition: color 0.3s, border-color 0.3s; }
-.view-all:hover { color: #fff; border-color: #fff; }
+.view-all:hover { color: var(--color-paper); border-color: var(--color-paper); }
 
 /* Editorial List */
 .editorial-list { display: flex; flex-direction: column; gap: 0; }
@@ -433,14 +433,15 @@ input.touched:invalid:focus, textarea.touched:invalid:focus {
   position: absolute;
   top: 0;
   left: 0;
-  width: 600px;
-  height: 600px;
-  background: radial-gradient(circle, var(--color-spotlight) 0%, transparent 60%);
+  width: 700px;
+  height: 700px;
+  background: radial-gradient(circle, var(--color-spotlight) 0%, transparent 68%);
   border-radius: 50%;
   pointer-events: none;
   opacity: 0;
   transform: translate(-50%, -50%); /* Center on cursor */
   z-index: 0;
+  transition: opacity 0.4s ease;
 }
 
 .footer-link {

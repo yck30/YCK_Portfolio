@@ -6,6 +6,9 @@
 - **Blog Detail Page**: Built dynamic route `/blog/[slug]` to render blog post details and display photos exclusively on individual blog post detail pages.
 - **Reusable ImageManager Component**: Created `<ImageManager />` with multi-image upload, crop alignment (`Center`, `Top`, `Bottom`), and storage-backed photo deletion (`🗑 Delete`). Standardized across Key Projects, Blog Posts, and future Phase 3 CMS Expansion modules.
 - **Project Image Cropping Fix**: Added Fit Mode (`Contain` / Full Original vs `Cover` / Fill) and vertical alignment options (`Top 15%`, `Upper-Center 25%`, `Center`, `Bottom Focus 85%`) to `<ImageManager />`, `ProjectImageSlider.tsx`, and project/blog detail pages. Updated database records for YCK Valcore & O.D.I.N so their full uncropped images display cleanly.
+- **Footer Cursor Spotlight Glow**: Enhanced cursor spotlight glow effect opacity (`rgba(147, 51, 234, 0.24)`) and radial spread (`700px`) for high ambient visibility in Light Mode.
+- **Theme Access Across Admin Pages**: Added `<ThemeToggle />` to Admin Dashboard (`/admin`) and Admin Login (`/admin/login`) for seamless Dark/Light theme switching.
+- **Light Mode UI/UX Audit & Contrast Fixes**: Updated Admin modal input colors (`var(--color-paper)` and `var(--color-glass)`), fixed `.view-all:hover` text visibility in light mode, and elevated frosted glass card contrast.
 
 ## 2026-08-06 (Phase 2 Auth & CMS - Supabase)
 

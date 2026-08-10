@@ -80,34 +80,34 @@ export function AdminFormModal({
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
           
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-            <label>ID / Slug</label>
+            <label style={{ fontSize: '14px', color: 'var(--color-paper)', fontWeight: 500 }}>ID / Slug</label>
             <input required name="id" value={formData.id || formData.slug || ''} onChange={(e) => {
               setFormData({ ...formData, id: e.target.value, slug: e.target.value })
-            }} style={{ padding: '8px', background: 'var(--color-glass)', color: 'white', border: '1px solid var(--color-hairline)' }} disabled={mode === 'edit'} />
+            }} style={{ padding: '8px 12px', borderRadius: '6px', background: 'var(--color-glass)', color: 'var(--color-paper)', border: '1px solid var(--color-hairline)', outline: 'none' }} disabled={mode === 'edit'} />
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-            <label>Title</label>
-            <input required name="title" value={formData.title || ''} onChange={handleChange} style={{ padding: '8px', background: 'var(--color-glass)', color: 'white', border: '1px solid var(--color-hairline)' }} />
+            <label style={{ fontSize: '14px', color: 'var(--color-paper)', fontWeight: 500 }}>Title</label>
+            <input required name="title" value={formData.title || ''} onChange={handleChange} style={{ padding: '8px 12px', borderRadius: '6px', background: 'var(--color-glass)', color: 'var(--color-paper)', border: '1px solid var(--color-hairline)', outline: 'none' }} />
           </div>
 
           {type === 'project' && (
             <>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                <label>Role</label>
-                <input required name="role" value={formData.role || ''} onChange={handleChange} style={{ padding: '8px', background: 'var(--color-glass)', color: 'white', border: '1px solid var(--color-hairline)' }} />
+                <label style={{ fontSize: '14px', color: 'var(--color-paper)', fontWeight: 500 }}>Role</label>
+                <input required name="role" value={formData.role || ''} onChange={handleChange} style={{ padding: '8px 12px', borderRadius: '6px', background: 'var(--color-glass)', color: 'var(--color-paper)', border: '1px solid var(--color-hairline)', outline: 'none' }} />
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                <label>Link (URL)</label>
-                <input required name="link" value={formData.link || ''} onChange={handleChange} style={{ padding: '8px', background: 'var(--color-glass)', color: 'white', border: '1px solid var(--color-hairline)' }} />
+                <label style={{ fontSize: '14px', color: 'var(--color-paper)', fontWeight: 500 }}>Link (URL)</label>
+                <input required name="link" value={formData.link || ''} onChange={handleChange} style={{ padding: '8px 12px', borderRadius: '6px', background: 'var(--color-glass)', color: 'var(--color-paper)', border: '1px solid var(--color-hairline)', outline: 'none' }} />
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                <label>Short Description (Main Page)</label>
-                <textarea required name="description" value={formData.description || ''} onChange={handleChange} rows={3} style={{ padding: '8px', background: 'var(--color-glass)', color: 'white', border: '1px solid var(--color-hairline)' }} />
+                <label style={{ fontSize: '14px', color: 'var(--color-paper)', fontWeight: 500 }}>Short Description (Main Page)</label>
+                <textarea required name="description" value={formData.description || ''} onChange={handleChange} rows={3} style={{ padding: '8px 12px', borderRadius: '6px', background: 'var(--color-glass)', color: 'var(--color-paper)', border: '1px solid var(--color-hairline)', outline: 'none' }} />
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                <label>Features (comma separated)</label>
-                <textarea name="features" value={typeof formData.features === 'string' ? formData.features : (formData.features?.join(', ') || '')} onChange={handleChange} rows={2} style={{ padding: '8px', background: 'var(--color-glass)', color: 'white', border: '1px solid var(--color-hairline)' }} />
+                <label style={{ fontSize: '14px', color: 'var(--color-paper)', fontWeight: 500 }}>Features (comma separated)</label>
+                <textarea name="features" value={typeof formData.features === 'string' ? formData.features : (formData.features?.join(', ') || '')} onChange={handleChange} rows={2} style={{ padding: '8px 12px', borderRadius: '6px', background: 'var(--color-glass)', color: 'var(--color-paper)', border: '1px solid var(--color-hairline)', outline: 'none' }} />
               </div>
               
               <ImageManager
@@ -121,16 +121,16 @@ export function AdminFormModal({
           {type === 'blog' && (
              <>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                <label>Excerpt</label>
-                <textarea required name="excerpt" value={formData.excerpt || ''} onChange={handleChange} rows={2} style={{ padding: '8px', background: 'var(--color-glass)', color: 'white', border: '1px solid var(--color-hairline)' }} />
+                <label style={{ fontSize: '14px', color: 'var(--color-paper)', fontWeight: 500 }}>Excerpt</label>
+                <textarea required name="excerpt" value={formData.excerpt || ''} onChange={handleChange} rows={2} style={{ padding: '8px 12px', borderRadius: '6px', background: 'var(--color-glass)', color: 'var(--color-paper)', border: '1px solid var(--color-hairline)', outline: 'none' }} />
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                <label>Read Time (e.g. 5 min read)</label>
-                <input required name="read_time" value={formData.read_time || ''} onChange={handleChange} style={{ padding: '8px', background: 'var(--color-glass)', color: 'white', border: '1px solid var(--color-hairline)' }} />
+                <label style={{ fontSize: '14px', color: 'var(--color-paper)', fontWeight: 500 }}>Read Time (e.g. 5 min read)</label>
+                <input required name="read_time" value={formData.read_time || ''} onChange={handleChange} style={{ padding: '8px 12px', borderRadius: '6px', background: 'var(--color-glass)', color: 'var(--color-paper)', border: '1px solid var(--color-hairline)', outline: 'none' }} />
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                <label>Tags (comma separated)</label>
-                <input name="tags" value={typeof formData.tags === 'string' ? formData.tags : (formData.tags?.join(', ') || '')} onChange={handleChange} style={{ padding: '8px', background: 'var(--color-glass)', color: 'white', border: '1px solid var(--color-hairline)' }} />
+                <label style={{ fontSize: '14px', color: 'var(--color-paper)', fontWeight: 500 }}>Tags (comma separated)</label>
+                <input name="tags" value={typeof formData.tags === 'string' ? formData.tags : (formData.tags?.join(', ') || '')} onChange={handleChange} style={{ padding: '8px 12px', borderRadius: '6px', background: 'var(--color-glass)', color: 'var(--color-paper)', border: '1px solid var(--color-hairline)', outline: 'none' }} />
               </div>
 
               <ImageManager
@@ -142,13 +142,13 @@ export function AdminFormModal({
           )}
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-            <label>Detailed Content (Markdown)</label>
-            <textarea name="content" value={formData.content || ''} onChange={handleChange} rows={8} style={{ padding: '8px', background: 'var(--color-glass)', color: 'white', border: '1px solid var(--color-hairline)', fontFamily: 'monospace' }} />
+            <label style={{ fontSize: '14px', color: 'var(--color-paper)', fontWeight: 500 }}>Detailed Content (Markdown)</label>
+            <textarea name="content" value={formData.content || ''} onChange={handleChange} rows={8} style={{ padding: '8px 12px', borderRadius: '6px', background: 'var(--color-glass)', color: 'var(--color-paper)', border: '1px solid var(--color-hairline)', fontFamily: 'monospace', outline: 'none' }} />
           </div>
 
           <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '16px', marginTop: '16px' }}>
-            <button type="button" onClick={onClose} style={{ padding: '8px 16px', background: 'transparent', border: '1px solid var(--color-hairline)', color: 'var(--color-paper)', borderRadius: '4px', cursor: 'pointer' }}>Cancel</button>
-            <button type="submit" disabled={isSubmitting} style={{ padding: '8px 16px', background: 'var(--color-paper)', border: 'none', color: 'var(--color-bg)', borderRadius: '4px', cursor: 'pointer' }}>
+            <button type="button" onClick={onClose} style={{ padding: '8px 16px', background: 'transparent', border: '1px solid var(--color-hairline)', color: 'var(--color-paper)', borderRadius: '6px', cursor: 'pointer' }}>Cancel</button>
+            <button type="submit" disabled={isSubmitting} style={{ padding: '8px 16px', background: 'var(--color-paper)', border: 'none', color: 'var(--color-bg)', borderRadius: '6px', cursor: 'pointer', fontWeight: 600 }}>
               {isSubmitting ? 'Saving...' : 'Save'}
             </button>
           </div>

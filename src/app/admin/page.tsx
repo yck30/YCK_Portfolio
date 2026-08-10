@@ -1,6 +1,7 @@
 import { createClient } from '@/utils/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
+import { ThemeToggle } from '@/components/ThemeToggle'
 import { AdminDashboardClient } from './AdminDashboardClient'
 
 export default async function AdminPage() {
@@ -22,6 +23,7 @@ export default async function AdminPage() {
         <h1 style={{ fontSize: '32px', margin: 0, fontFamily: 'var(--font-primary)' }}>CMS Dashboard</h1>
         <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
           <span style={{ color: 'var(--color-muted)', fontSize: '14px' }}>Logged in as {user.email}</span>
+          <ThemeToggle />
           <Link 
             href="/" 
             style={{ 
