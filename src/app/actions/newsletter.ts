@@ -43,7 +43,7 @@ export async function subscribeToNewsletter(formData: FormData) {
       try {
         const resend = new Resend(process.env.RESEND_API_KEY)
         await resend.emails.send({
-          from: 'CK Yong <ckyong@kitabuild.com>',
+          from: 'CK Yong <ckyong@portfolio.kitabuild.com>',
           to: email,
           subject: `Welcome to the Newsletter!`,
           html: `

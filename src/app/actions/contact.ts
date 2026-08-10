@@ -24,7 +24,7 @@ export async function sendContactConfirmation(formData: FormData) {
     // and can only send to your own registered email address.
     // If you have verified your custom domain, change "onboarding@resend.dev" to e.g., "no-reply@yourdomain.com"
     const { data, error } = await resend.emails.send({
-      from: 'CK Yong <ckyong@kitabuild.com>',
+      from: 'CK Yong <ckyong@portfolio.kitabuild.com>',
       to: email,
       subject: `We received your message, ${name}!`,
       html: `
