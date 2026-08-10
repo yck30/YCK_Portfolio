@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { createClient } from '@/utils/supabase/server'
 import { ProjectImageSlider } from './ProjectImageSlider'
+import { ProjectUrlLink } from './ProjectUrlLink'
 
 export async function Projects() {
   const supabase = createClient()
@@ -17,7 +18,12 @@ export async function Projects() {
               <div className="bento-content">
                 <div className="bento-meta">
                   <h3>{p.title}</h3>
-                  <span className="bento-role">{p.role}</span>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
+                    <span className="bento-role">{p.role}</span>
+                    {p.link && p.link !== '#' && p.link.trim() !== '' && (
+                      <ProjectUrlLink link={p.link} />
+                    )}
+                  </div>
                 </div>
                 <p>{p.description}</p>
                 {p.features && p.features.length > 0 && (

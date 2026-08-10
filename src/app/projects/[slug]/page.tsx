@@ -44,6 +44,30 @@ export default async function ProjectDetail({ params }: { params: { slug: string
           <p style={{ fontSize: 'clamp(18px, 2vw, 24px)', color: 'var(--color-muted)', lineHeight: 1.5, margin: 0, maxWidth: '700px' }}>
             {project.description}
           </p>
+          {project.link && project.link !== '#' && project.link.trim() !== '' && (
+            <div style={{ marginTop: '32px' }}>
+              <a 
+                href={project.link.startsWith('http') ? project.link : `https://${project.link}`} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  padding: '12px 24px',
+                  background: 'var(--color-paper)',
+                  color: 'var(--color-bg)',
+                  textDecoration: 'none',
+                  borderRadius: '999px',
+                  fontWeight: 600,
+                  fontSize: '16px',
+                }}
+              >
+                Visit Project
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+              </a>
+            </div>
+          )}
         </header>
 
         {project.content && (
