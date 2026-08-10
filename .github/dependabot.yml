@@ -19,6 +19,13 @@ updates:
       - "security"
     commit-message:
       prefix: "chore(deps)"
+    ignore:
+      # Next.js 14 does not fully support ESLint 9/10 flat config in `next lint`.
+      # Ignore major updates until we migrate to Next.js 15.
+      - dependency-name: "eslint"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "eslint-config-next"
+        update-types: ["version-update:semver-major"]
     # Group minor and patch updates to reduce PR noise
     groups:
       react-ecosystem:
