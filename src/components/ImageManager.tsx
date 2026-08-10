@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { createClient } from '@/utils/supabase/client'
+import { ConfirmModal } from '@/components/ConfirmModal'
 
 export type ImageItem = {
   src: string;
