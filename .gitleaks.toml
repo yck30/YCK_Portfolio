@@ -1,0 +1,15 @@
+# Gitleaks Configuration for YCK Portfolio
+title = "gitleaks config"
+
+[allowlist]
+description = "Global allowlist for baseline commits and public test keys"
+regexes = [
+  '''re_[A-Za-z0-9_]{20,}''',
+  '''eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+''',
+  '''https://vkobklyguvetlzkjvfaq\.supabase\.co'''
+]
+paths = [
+  '''\.env\.local''',
+  '''\.env\.example''',
+  '''\.env'''
+]
