@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-08-11 (Blog Post Photos & Media Management)
+
+- **Blog Post Photo Upload**: Added photo upload capability for blog posts in Admin Dashboard (`/admin`), saving uploaded photos to Supabase Storage (`portfolio-images`) and `blog_posts.images`.
+- **Blog Detail Page**: Built dynamic route `/blog/[slug]` to render blog post details and display photos exclusively on individual blog post detail pages.
+- **Reusable ImageManager Component**: Created `<ImageManager />` with multi-image upload, crop alignment (`Center`, `Top`, `Bottom`), and storage-backed photo deletion (`🗑 Delete`). Standardized across Key Projects, Blog Posts, and future Phase 3 CMS Expansion modules.
+
 ## 2026-08-06 (Phase 2 Auth & CMS - Supabase)
 
 - **Supabase Integration**: Set up Supabase PostgreSQL database for managing Projects and Blog Posts.

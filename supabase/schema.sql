@@ -21,6 +21,7 @@ CREATE TABLE public.blog_posts (
     excerpt text NOT NULL,
     content text NOT NULL,
     tags jsonb DEFAULT '[]'::jsonb,
+    images jsonb DEFAULT '[]'::jsonb,
     read_time text,
     published_at timestamp with time zone DEFAULT timezone('utc'::text, now()) NOT NULL
 );

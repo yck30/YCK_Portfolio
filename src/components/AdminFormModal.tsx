@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { createClient } from '@/utils/supabase/client'
 import { useRouter } from 'next/navigation'
+import { ImageManager } from '@/components/ImageManager'
 
 export function AdminFormModal({ 
   isOpen, 
@@ -21,50 +22,11 @@ export function AdminFormModal({
   const router = useRouter()
   const [formData, setFormData] = useState(initialData || {})
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [uploadingImage, setUploadingImage] = useState(false)
 
   if (!isOpen) return null
 
   const handleChange = (e: any) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
-  }
-
-  const handleImageUpload = async (e: any) => {
-    const files = Array.from(e.target.files)
-    if (!files || files.length === 0) return
-    setUploadingImage(true)
-    
-    try {
-      const newImages: any[] = []
-      
-      for (const file of files as any[]) {
-        const fileExt = file.name.split('.').pop()
-        const fileName = `${Math.random()}.${fileExt}`
-        const filePath = `${fileName}`
-
-        const { error: uploadError } = await supabase.storage
-          .from('portfolio-images')
-          .upload(filePath, file)
-
-        if (uploadError) throw uploadError
-
-        const { data: { publicUrl } } = supabase.storage
-          .from('portfolio-images')
-          .getPublicUrl(filePath)
-          
-        newImages.push({ src: publicUrl, position: 'center' })
-      }
-
-      const currentImages = formData.images || []
-      setFormData({
-        ...formData,
-        images: [...currentImages, ...newImages]
-      })
-    } catch (error: any) {
-      alert('Error uploading image: ' + error.message)
-    } finally {
-      setUploadingImage(false)
-    }
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -148,16 +110,11 @@ export function AdminFormModal({
                 <textarea name="features" value={typeof formData.features === 'string' ? formData.features : (formData.features?.join(', ') || '')} onChange={handleChange} rows={2} style={{ padding: '8px', background: 'var(--color-glass)', color: 'white', border: '1px solid var(--color-hairline)' }} />
               </div>
               
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                <label>Upload Image(s)</label>
-                <input type="file" accept="image/*" multiple onChange={handleImageUpload} disabled={uploadingImage} />
-                {uploadingImage && <span>Uploading...</span>}
-                <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-                  {formData.images?.map((img: any, idx: number) => (
-                    <img key={idx} src={img.src} alt="Uploaded" style={{ width: '80px', height: '80px', objectFit: 'cover' }} />
-                  ))}
-                </div>
-              </div>
+              <ImageManager
+                images={formData.images || []}
+                onChange={(images) => setFormData({ ...formData, images })}
+                label="Project Screenshots & Photos"
+              />
             </>
           )}
 
@@ -175,6 +132,12 @@ export function AdminFormModal({
                 <label>Tags (comma separated)</label>
                 <input name="tags" value={typeof formData.tags === 'string' ? formData.tags : (formData.tags?.join(', ') || '')} onChange={handleChange} style={{ padding: '8px', background: 'var(--color-glass)', color: 'white', border: '1px solid var(--color-hairline)' }} />
               </div>
+
+              <ImageManager
+                images={formData.images || []}
+                onChange={(images) => setFormData({ ...formData, images })}
+                label="Blog Post Photos / Images (displayed on detail page)"
+              />
              </>
           )}
 
@@ -185,7 +148,7 @@ export function AdminFormModal({
 
           <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '16px', marginTop: '16px' }}>
             <button type="button" onClick={onClose} style={{ padding: '8px 16px', background: 'transparent', border: '1px solid var(--color-hairline)', color: 'var(--color-paper)', borderRadius: '4px', cursor: 'pointer' }}>Cancel</button>
-            <button type="submit" disabled={isSubmitting || uploadingImage} style={{ padding: '8px 16px', background: 'var(--color-paper)', border: 'none', color: 'var(--color-bg)', borderRadius: '4px', cursor: 'pointer' }}>
+            <button type="submit" disabled={isSubmitting} style={{ padding: '8px 16px', background: 'var(--color-paper)', border: 'none', color: 'var(--color-bg)', borderRadius: '4px', cursor: 'pointer' }}>
               {isSubmitting ? 'Saving...' : 'Save'}
             </button>
           </div>

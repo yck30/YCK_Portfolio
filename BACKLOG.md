@@ -94,8 +94,8 @@ Agents must not implement Icebox items without CK's written approval.
 
 ### CMS Expansion (Full Content Control)
 - [ ] CMS support for Credentials, KitaBuild LLP, Journey, About, and Footer (contact info, social media)
-- [ ] Advanced image composition controls for Key Projects & KitaBuild LLP
-- [ ] Blog Post cover image uploads (displayed on detail page only)
+- [x] Advanced image composition & deletion controls (ImageManager for Key Projects, Blog Posts, & Phase 3 CMS Expansion)
+- [x] Blog Post photo / cover image uploads (displayed on detail page only)
 
 ---
 
