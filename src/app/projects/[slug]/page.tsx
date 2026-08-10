@@ -78,17 +78,36 @@ export default async function ProjectDetail({ params }: { params: { slug: string
 
         {project.images && project.images.length > 0 && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '32px', marginBottom: '64px' }}>
-            {project.images.map((img: any, idx: number) => (
-              <div key={idx} style={{ position: 'relative', width: '100%', aspectRatio: '16/9', borderRadius: '12px', overflow: 'hidden', border: '1px solid var(--color-hairline)' }}>
-                <Image 
-                  src={img.src} 
-                  alt={`${project.title} screenshot ${idx + 1}`}
-                  fill
-                  style={{ objectFit: 'cover', objectPosition: img.position || 'center' }}
-                  priority={idx === 0}
-                />
-              </div>
-            ))}
+            {project.images.map((img: any, idx: number) => {
+              const fitMode = typeof img === 'object' && img.fit ? img.fit : 'contain';
+              const src = typeof img === 'string' ? img : img.src;
+              return (
+                <div 
+                  key={idx} 
+                  style={{ 
+                    position: 'relative', 
+                    width: '100%', 
+                    aspectRatio: fitMode === 'cover' ? '16/9' : '16/10', 
+                    borderRadius: '12px', 
+                    overflow: 'hidden', 
+                    border: '1px solid var(--color-hairline)',
+                    background: 'var(--color-glass)',
+                    padding: fitMode === 'contain' ? '16px' : '0'
+                  }}
+                >
+                  <Image 
+                    src={src} 
+                    alt={`${project.title} screenshot ${idx + 1}`}
+                    fill
+                    style={{ 
+                      objectFit: fitMode as any, 
+                      objectPosition: img.position || 'center 15%' 
+                    }}
+                    priority={idx === 0}
+                  />
+                </div>
+              )
+            })}
           </div>
         )}
 

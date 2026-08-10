@@ -80,29 +80,37 @@ export default async function BlogPostDetail({ params }: { params: { slug: strin
         {/* Display Uploaded Photos / Images exclusively on the details page */}
         {post.images && Array.isArray(post.images) && post.images.length > 0 && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', marginBottom: '48px' }}>
-            {post.images.map((img: any, idx: number) => (
-              <div 
-                key={idx} 
-                style={{ 
-                  position: 'relative', 
-                  width: '100%', 
-                  maxHeight: '600px',
-                  aspectRatio: '16/9', 
-                  borderRadius: '12px', 
-                  overflow: 'hidden', 
-                  border: '1px solid var(--color-hairline)',
-                  background: 'var(--color-glass)' 
-                }}
-              >
-                <Image 
-                  src={typeof img === 'string' ? img : img.src} 
-                  alt={`${post.title} photo ${idx + 1}`}
-                  fill
-                  style={{ objectFit: 'cover', objectPosition: img.position || 'center' }}
-                  priority={idx === 0}
-                />
-              </div>
-            ))}
+            {post.images.map((img: any, idx: number) => {
+              const fitMode = typeof img === 'object' && img.fit ? img.fit : 'contain';
+              const src = typeof img === 'string' ? img : img.src;
+              return (
+                <div 
+                  key={idx} 
+                  style={{ 
+                    position: 'relative', 
+                    width: '100%', 
+                    maxHeight: '600px',
+                    aspectRatio: fitMode === 'cover' ? '16/9' : '16/10', 
+                    borderRadius: '12px', 
+                    overflow: 'hidden', 
+                    border: '1px solid var(--color-hairline)',
+                    background: 'var(--color-glass)',
+                    padding: fitMode === 'contain' ? '12px' : '0'
+                  }}
+                >
+                  <Image 
+                    src={src} 
+                    alt={`${post.title} photo ${idx + 1}`}
+                    fill
+                    style={{ 
+                      objectFit: fitMode as any, 
+                      objectPosition: img.position || 'center 15%' 
+                    }}
+                    priority={idx === 0}
+                  />
+                </div>
+              )
+            })}
           </div>
         )}
 

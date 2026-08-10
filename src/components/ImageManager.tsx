@@ -6,6 +6,7 @@ import { createClient } from '@/utils/supabase/client'
 export type ImageItem = {
   src: string;
   position?: string;
+  fit?: 'cover' | 'contain' | string;
   filePath?: string;
 }
 
@@ -71,7 +72,8 @@ export function ImageManager({
         uploadedItems.push({
           src: publicUrl,
           filePath: filePath,
-          position: 'center'
+          position: 'center 15%',
+          fit: 'contain'
         })
       }
 
@@ -130,6 +132,16 @@ export function ImageManager({
     onChange(updated)
   }
 
+  const handleFitChange = (index: number, newFit: string) => {
+    const updated = images.map((img, idx) => {
+      if (idx === index) {
+        return { ...img, fit: newFit }
+      }
+      return img
+    })
+    onChange(updated)
+  }
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
       <label style={{ fontSize: '14px', fontWeight: 600, color: 'var(--color-paper)' }}>{label}</label>
@@ -158,7 +170,7 @@ export function ImageManager({
             {uploading ? '⏳ Uploading files to storage...' : '📁 Click or Drag files to upload photos'}
           </div>
           <span style={{ fontSize: '12px', color: 'var(--color-muted)', marginTop: '4px', display: 'block' }}>
-            Supports PNG, JPG, WEBP, GIF
+            Supports PNG, JPG, WEBP, GIF (Default: Full Uncropped Fit)
           </span>
         </label>
       </div>
@@ -167,7 +179,7 @@ export function ImageManager({
       {images.length > 0 && (
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(130px, 1fr))',
+          gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))',
           gap: '12px',
           marginTop: '8px'
         }}>
@@ -179,21 +191,21 @@ export function ImageManager({
                 borderRadius: '8px',
                 overflow: 'hidden',
                 border: '1px solid var(--color-hairline)',
-                background: '#000',
+                background: '#0a0a0a',
                 display: 'flex',
                 flexDirection: 'column'
               }}
             >
               {/* Image Preview */}
-              <div style={{ position: 'relative', width: '100%', height: '100px' }}>
+              <div style={{ position: 'relative', width: '100%', height: '110px', background: 'rgba(255,255,255,0.03)' }}>
                 <img
                   src={img.src}
                   alt={`Photo ${idx + 1}`}
                   style={{
                     width: '100%',
                     height: '100%',
-                    objectFit: 'cover',
-                    objectPosition: img.position || 'center'
+                    objectFit: (img.fit as any) || 'contain',
+                    objectPosition: img.position || 'center 15%'
                   }}
                 />
                 
@@ -219,40 +231,67 @@ export function ImageManager({
                     alignItems: 'center',
                     gap: '4px',
                     boxShadow: '0 2px 4px rgba(0,0,0,0.3)',
-                    transition: 'transform 0.1s ease'
+                    transition: 'transform 0.1s ease',
+                    zIndex: 2
                   }}
                 >
                   {deletingIndex === idx ? '...' : '🗑 Delete'}
                 </button>
               </div>
 
-              {/* Position selector footer */}
+              {/* Fit & Position selector controls */}
               <div style={{
-                padding: '6px 8px',
+                padding: '8px',
                 background: 'var(--color-bg)',
                 borderTop: '1px solid var(--color-hairline)',
                 display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
+                flexDirection: 'column',
+                gap: '6px',
                 fontSize: '11px'
               }}>
-                <span style={{ color: 'var(--color-muted)' }}>Align:</span>
-                <select
-                  value={img.position || 'center'}
-                  onChange={(e) => handlePositionChange(idx, e.target.value)}
-                  style={{
-                    background: 'transparent',
-                    color: 'var(--color-paper)',
-                    border: 'none',
-                    fontSize: '11px',
-                    cursor: 'pointer',
-                    outline: 'none'
-                  }}
-                >
-                  <option value="center" style={{ background: '#111' }}>Center</option>
-                  <option value="top" style={{ background: '#111' }}>Top</option>
-                  <option value="bottom" style={{ background: '#111' }}>Bottom</option>
-                </select>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span style={{ color: 'var(--color-muted)' }}>Fit:</span>
+                  <select
+                    value={img.fit || 'contain'}
+                    onChange={(e) => handleFitChange(idx, e.target.value)}
+                    style={{
+                      background: 'var(--color-glass)',
+                      color: 'var(--color-paper)',
+                      border: '1px solid var(--color-hairline)',
+                      borderRadius: '4px',
+                      fontSize: '11px',
+                      padding: '2px 4px',
+                      cursor: 'pointer',
+                      outline: 'none'
+                    }}
+                  >
+                    <option value="contain" style={{ background: '#111' }}>Full Original (Contain)</option>
+                    <option value="cover" style={{ background: '#111' }}>Crop to Fill (Cover)</option>
+                  </select>
+                </div>
+
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span style={{ color: 'var(--color-muted)' }}>Align:</span>
+                  <select
+                    value={img.position || 'center 15%'}
+                    onChange={(e) => handlePositionChange(idx, e.target.value)}
+                    style={{
+                      background: 'var(--color-glass)',
+                      color: 'var(--color-paper)',
+                      border: '1px solid var(--color-hairline)',
+                      borderRadius: '4px',
+                      fontSize: '11px',
+                      padding: '2px 4px',
+                      cursor: 'pointer',
+                      outline: 'none'
+                    }}
+                  >
+                    <option value="center 15%" style={{ background: '#111' }}>Top Focus (15%)</option>
+                    <option value="center 25%" style={{ background: '#111' }}>Upper-Center (25%)</option>
+                    <option value="center" style={{ background: '#111' }}>Center</option>
+                    <option value="center 85%" style={{ background: '#111' }}>Bottom Focus (85%)</option>
+                  </select>
+                </div>
               </div>
             </div>
           ))}
