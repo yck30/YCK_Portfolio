@@ -35,7 +35,10 @@ export async function subscribeToNewsletter(formData: FormData) {
       if (data.email_address && Array.isArray(data.email_address)) {
          return { error: data.email_address[0] }
       }
-      return { error: 'Failed to subscribe. Please try again.' }
+      if (data.detail) {
+        return { error: typeof data.detail === 'string' ? data.detail : JSON.stringify(data.detail) }
+      }
+      return { error: `Failed to subscribe: ${JSON.stringify(data)}` }
     }
 
     // Try to send a welcome email via Resend if successful
