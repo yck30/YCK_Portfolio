@@ -62,13 +62,9 @@ export function AdminFormModal({
         dataToSave.tags = dataToSave.tags.split(',').map((t: string) => t.trim()).filter((t: string) => t)
       }
 
-      // Ensure id/slug match depending on type
+      // Ensure no extraneous slug column for projects
       if (type === 'project') {
-         dataToSave.id = formData.id || formData.slug;
          delete dataToSave.slug;
-      } else {
-         dataToSave.slug = formData.slug || formData.id;
-         dataToSave.id = dataToSave.slug;
       }
 
       if (mode === 'add') {
