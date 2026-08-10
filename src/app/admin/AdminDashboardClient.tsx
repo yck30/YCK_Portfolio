@@ -5,6 +5,7 @@ import { createClient } from '@/utils/supabase/client'
 import { useRouter } from 'next/navigation'
 import { AdminFormModal } from '@/components/AdminFormModal'
 import { ConfirmModal } from '@/components/ConfirmModal'
+import { revalidateCMSContent } from '@/app/actions/revalidate'
 
 export function AdminDashboardClient({ initialProjects, initialBlogPosts }: { initialProjects: any[], initialBlogPosts: any[] }) {
   const [activeTab, setActiveTab] = useState<'projects' | 'blog'>('projects')
@@ -33,6 +34,7 @@ export function AdminDashboardClient({ initialProjects, initialBlogPosts }: { in
         const { error } = await supabase.from('projects').delete().eq('id', deleteTarget.id)
         if (!error) {
           setProjects(projects.filter(p => p.id !== deleteTarget.id))
+          await revalidateCMSContent()
           router.refresh()
         } else {
           alert('Error deleting project: ' + error.message)
@@ -41,6 +43,7 @@ export function AdminDashboardClient({ initialProjects, initialBlogPosts }: { in
         const { error } = await supabase.from('blog_posts').delete().eq('id', deleteTarget.id)
         if (!error) {
           setBlogPosts(blogPosts.filter(p => p.id !== deleteTarget.id))
+          await revalidateCMSContent()
           router.refresh()
         } else {
           alert('Error deleting post: ' + error.message)

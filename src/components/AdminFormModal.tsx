@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { createClient } from '@/utils/supabase/client'
 import { useRouter } from 'next/navigation'
 import { ImageManager } from '@/components/ImageManager'
+import { revalidateCMSContent } from '@/app/actions/revalidate'
 
 export function AdminFormModal({ 
   isOpen, 
@@ -75,6 +76,7 @@ export function AdminFormModal({
 
       if (result.error) throw result.error
       onSuccess(result.data)
+      await revalidateCMSContent()
       onClose()
       router.refresh()
     } catch (error: any) {
