@@ -198,6 +198,7 @@ export function ImageManager({
             >
               {/* Image Preview */}
               <div style={{ position: 'relative', width: '100%', height: '110px', background: 'rgba(255,255,255,0.03)' }}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={img.src}
                   alt={`Photo ${idx + 1}`}
