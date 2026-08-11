@@ -90,6 +90,7 @@ Agents must not implement Icebox items without CK's written approval.
 - [ ] Trilingual i18n (English / Bahasa Malaysia / Mandarin) — Hybrid AI Auto-Translation (Gemini API) with manual CMS override + UI dictionary files
 - [ ] Portfolio PDF export
 - [ ] Testimonials section
+- [ ] Review and revise Hero page contents (Home hero & About section copywriting/presentation)
 - [ ] Speaking / appearances section
 
 ### CMS Expansion (Full Content Control)
