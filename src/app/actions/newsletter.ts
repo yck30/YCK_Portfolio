@@ -20,6 +20,7 @@ export async function subscribeToNewsletter(formData: FormData) {
       headers: {
         'Authorization': `Token ${apiKey}`,
         'Content-Type': 'application/json',
+        'X-Buttondown-Collision-Behavior': 'add'
       },
       body: JSON.stringify({
         email_address: email,
