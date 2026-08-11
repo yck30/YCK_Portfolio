@@ -1,5 +1,6 @@
 'use server'
 
+import { headers } from 'next/headers'
 import { Resend } from 'resend'
 
 export async function subscribeToNewsletter(formData: FormData) {
@@ -14,17 +15,33 @@ export async function subscribeToNewsletter(formData: FormData) {
     return { error: 'Newsletter service is not configured yet.' }
   }
 
+  const headerList = headers()
+  const rawIp = headerList.get('x-forwarded-for') || headerList.get('x-real-ip') || ''
+  const clientIp = rawIp.split(',')[0].trim()
+
   try {
+    const requestHeaders: Record<string, string> = {
+      'Authorization': `Token ${apiKey}`,
+      'Content-Type': 'application/json',
+      'X-Buttondown-Collision-Behavior': 'add'
+    }
+
+    if (clientIp) {
+      requestHeaders['X-Forwarded-For'] = clientIp
+    }
+
+    const payload: Record<string, any> = {
+      email_address: email,
+    }
+
+    if (clientIp) {
+      payload.ip_address = clientIp
+    }
+
     const response = await fetch('https://api.buttondown.email/v1/subscribers', {
       method: 'POST',
-      headers: {
-        'Authorization': `Token ${apiKey}`,
-        'Content-Type': 'application/json',
-        'X-Buttondown-Collision-Behavior': 'add'
-      },
-      body: JSON.stringify({
-        email_address: email,
-      }),
+      headers: requestHeaders,
+      body: JSON.stringify(payload),
     })
 
     if (!response.ok) {
