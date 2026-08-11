@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-08-11 (Phase 3 CMS Expansion — Full Content Control)
+
+- **Full CMS Expansion**: Extended Supabase database and Admin Dashboard (`/admin`) to support complete content management across all key site sections: About, Journey, KitaBuild LLP Pipeline, Credentials, and Footer/Social links.
+- **Supabase Schema Expansion**: Created `supabase/schema_expansion.sql` containing table definitions, RLS security policies, and seed data for `about_content`, `journey_entries`, `kitabuild_pipeline`, `credentials`, and `footer_links`.
+- **Expanded Admin Dashboard**: Upgraded `<AdminDashboardClient />` with 7 content tabs and `<AdminFormModal />` to handle CRUD operations for all entities, supporting freeform categories for Credentials and custom CTAs/statuses for KitaBuild.
+- **Graceful Server Fallbacks**: Converted `About.tsx`, `Journey.tsx`, `KitaBuildPipeline.tsx`, `credentials/page.tsx`, and `Footer.tsx` to fetch from Supabase with zero-downtime fallback to local static JSON arrays.
+
 ## 2026-08-11 (Blog Post Photos & Media Management)
 
 - **Blog Post Photo Upload**: Added photo upload capability for blog posts in Admin Dashboard (`/admin`), saving uploaded photos to Supabase Storage (`portfolio-images`) and `blog_posts.images`.

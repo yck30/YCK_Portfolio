@@ -2,77 +2,100 @@ import React from 'react';
 import { Navigation } from '@/components/Navigation';
 import { BackButton } from '@/components/BackButton';
 import { Footer } from '@/components/Footer';
+import { createClient } from '@/utils/supabase/server';
 
 export const metadata = {
   title: 'Credentials | CK Yong',
   description: 'Credentials and certifications.',
 };
 
-export default function CredentialsPage() {
-  const credentialsData = [
-    {
-      category: "Academic & Research",
-      items: [
-        { title: "\"A Critical Review of Sustainability Outcomes and Measurement Challenges in ESG Frameworks\"", issuer: "Scopus-indexed, MSW Management Journal", year: "2026" },
-        { title: "Master of Business Administration (In Progress)", issuer: "INTI International University", year: "2025" },
-        { title: "Bachelor of Economics (Hons), Planning and Development Economics", issuer: "Universiti Malaysia Sabah", year: "2019" },
-        { title: "Commissioned 2nd Lieutenant", issuer: "Royal Malaysian Air Force (Volunteer Reserve)", year: "2019" }
-      ]
-    },
-    {
-      category: "AI & Software Development",
-      items: [
-        { title: "Full-Stack AI Developer Certificate", issuer: "Gamuda AI Academy (Sabah), Cohort 3", year: "2026" },
-        { title: "2nd Runner-Up, Capstone Project", issuer: "Gamuda AI Academy (Sabah), Cohort 3", year: "2026" },
-        { title: "Certified User: Programmer (Unity)", issuer: "Unity Technologies", year: "2025" },
-        { title: "Android Certified Application Developer", issuer: "ATC", year: "2023" }
-      ]
-    },
-    {
-      category: "Project Management",
-      items: [
-        { title: "PMI Certified Associate in Project Management (CAPM)", year: "2026" },
-        { title: "PMI Project Management Ready®", year: "2025" }
-      ]
-    },
-    {
-      category: "Digital Content & Design (Adobe Certified Professional)",
-      items: [
-        { title: "Document Creation & Management using Adobe Acrobat Pro", year: "2025" },
-        { title: "Print & Digital Media Publication using Adobe InDesign", year: "2025" },
-        { title: "Content Creation & Marketing using Adobe Express", year: "2025" },
-        { title: "Visual Design using Adobe Photoshop", year: "2024" },
-        { title: "Multiplatform Animation using Adobe Animate", year: "2024" },
-        { title: "Visual Effects & Motion Graphics using Adobe After Effects", year: "2024" },
-        { title: "Graphic Design & Illustration using Adobe Illustrator", year: "2023" },
-        { title: "Digital Video using Adobe Premiere Pro", year: "2023" }
-      ]
-    },
-    {
-      category: "Business & Office Productivity",
-      items: [
-        { title: "Microsoft Office Specialist – Word Expert", year: "2024" },
-        { title: "Microsoft Office Specialist – Excel Expert", year: "2024" },
-        { title: "Access UBS Certificate – Accounting", year: "2024" },
-        { title: "Access UBS Certificate – Inventory", year: "2024" },
-        { title: "Microsoft Office Specialist – Associate (Word, Excel, PowerPoint)", year: "2023" }
-      ]
-    },
-    {
-      category: "Data Strategy & Automation",
-      items: [
-        { title: "Microsoft Certified: Power Platform Fundamentals", year: "2023" },
-        { title: "Microsoft Certified: Power BI Data Analyst Associate", year: "2023" }
-      ]
-    },
-    {
-      category: "Digital Marketing",
-      items: [
-        { title: "Digital Marketing Certificate", issuer: "Google Digital Garage", year: "2023" },
-        { title: "Meta Certified Digital Marketing Associate", year: "2023" }
-      ]
+export const revalidate = 0;
+
+const fallbackCredentialsData = [
+  {
+    category: "Academic & Research",
+    items: [
+      { title: "\"A Critical Review of Sustainability Outcomes and Measurement Challenges in ESG Frameworks\"", issuer: "Scopus-indexed, MSW Management Journal", year: "2026" },
+      { title: "Master of Business Administration (In Progress)", issuer: "INTI International University", year: "2025" },
+      { title: "Bachelor of Economics (Hons), Planning and Development Economics", issuer: "Universiti Malaysia Sabah", year: "2019" },
+      { title: "Commissioned 2nd Lieutenant", issuer: "Royal Malaysian Air Force (Volunteer Reserve)", year: "2019" }
+    ]
+  },
+  {
+    category: "AI & Software Development",
+    items: [
+      { title: "Full-Stack AI Developer Certificate", issuer: "Gamuda AI Academy (Sabah), Cohort 3", year: "2026" },
+      { title: "2nd Runner-Up, Capstone Project", issuer: "Gamuda AI Academy (Sabah), Cohort 3", year: "2026" },
+      { title: "Certified User: Programmer (Unity)", issuer: "Unity Technologies", year: "2025" },
+      { title: "Android Certified Application Developer", issuer: "ATC", year: "2023" }
+    ]
+  },
+  {
+    category: "Project Management",
+    items: [
+      { title: "PMI Certified Associate in Project Management (CAPM)", year: "2026" },
+      { title: "PMI Project Management Ready®", year: "2025" }
+    ]
+  },
+  {
+    category: "Digital Content & Design (Adobe Certified Professional)",
+    items: [
+      { title: "Document Creation & Management using Adobe Acrobat Pro", year: "2025" },
+      { title: "Print & Digital Media Publication using Adobe InDesign", year: "2025" },
+      { title: "Content Creation & Marketing using Adobe Express", year: "2025" },
+      { title: "Visual Design using Adobe Photoshop", year: "2024" },
+      { title: "Multiplatform Animation using Adobe Animate", year: "2024" },
+      { title: "Visual Effects & Motion Graphics using Adobe After Effects", year: "2024" },
+      { title: "Graphic Design & Illustration using Adobe Illustrator", year: "2023" },
+      { title: "Digital Video using Adobe Premiere Pro", year: "2023" }
+    ]
+  },
+  {
+    category: "Business & Office Productivity",
+    items: [
+      { title: "Microsoft Office Specialist – Word Expert", year: "2024" },
+      { title: "Microsoft Office Specialist – Excel Expert", year: "2024" },
+      { title: "Access UBS Certificate – Accounting", year: "2024" },
+      { title: "Access UBS Certificate – Inventory", year: "2024" },
+      { title: "Microsoft Office Specialist – Associate (Word, Excel, PowerPoint)", year: "2023" }
+    ]
+  },
+  {
+    category: "Data Strategy & Automation",
+    items: [
+      { title: "Microsoft Certified: Power Platform Fundamentals", year: "2023" },
+      { title: "Microsoft Certified: Power BI Data Analyst Associate", year: "2023" }
+    ]
+  },
+  {
+    category: "Digital Marketing",
+    items: [
+      { title: "Digital Marketing Certificate", issuer: "Google Digital Garage", year: "2023" },
+      { title: "Meta Certified Digital Marketing Associate", year: "2023" }
+    ]
+  }
+];
+
+export default async function CredentialsPage() {
+  const supabase = createClient()
+  const { data: dbCredentials } = await supabase.from('credentials').select('*').order('order_index', { ascending: true })
+
+  let credentialsData;
+  if (dbCredentials && dbCredentials.length > 0) {
+    const categoryMap = new Map<string, any[]>()
+    for (const item of dbCredentials) {
+      if (!categoryMap.has(item.category)) {
+        categoryMap.set(item.category, [])
+      }
+      categoryMap.get(item.category)!.push(item)
     }
-  ];
+    credentialsData = Array.from(categoryMap.entries()).map(([category, items]) => ({
+      category,
+      items
+    }))
+  } else {
+    credentialsData = fallbackCredentialsData;
+  }
 
   return (
     <main className="page-shell" style={{ position: 'relative', zIndex: 0 }}>
@@ -101,7 +124,6 @@ export default function CredentialsPage() {
           "/assets/Digital_Badge (17).png", "/assets/Digital_Badge (18).png", "/assets/Digital_Badge (19).PNG", "/assets/Digital_Badge (20).png",
           "/assets/Digital_Badge (21).png", "/assets/Digital_Badge (22).png", "/assets/Digital_Badge (23).png"
         ].map((src, i) => {
-          // Deterministic pseudo-random generation to prevent hydration mismatches
           const pseudoRand = (seed: number) => {
             const x = Math.sin(seed * 9999) * 10000;
             return x - Math.floor(x);
@@ -115,8 +137,8 @@ export default function CredentialsPage() {
           const moveX = (pseudoRand(i + 500) - 0.5) * 120; 
           const moveY = (pseudoRand(i + 600) - 0.5) * 160; 
           
-          const durX = 10 + pseudoRand(i + 700) * 15; // 10s to 25s
-          const durY = 13 + pseudoRand(i + 800) * 18; // 13s to 31s (Prime offsets for non-repeating Lissajous curves)
+          const durX = 10 + pseudoRand(i + 700) * 15;
+          const durY = 13 + pseudoRand(i + 800) * 18;
           const delay = pseudoRand(i + 900) * -40;
           
           return (
@@ -136,7 +158,6 @@ export default function CredentialsPage() {
           );
         })}
         
-        {/* Deep ambient glow overlays to integrate the images */}
         <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(circle at center, transparent 0%, var(--color-bg) 100%)', opacity: 0.85 }} />
       </div>
 
