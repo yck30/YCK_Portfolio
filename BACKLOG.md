@@ -87,7 +87,7 @@ Agents must not implement Icebox items without CK's written approval.
 - [ ] RSS feed for blog
 - [ ] Open Graph / Twitter Card meta images (dynamic)
 - [ ] Sitemap.xml auto-generation
-- [ ] i18n — Bahasa Malaysia / English toggle
+- [ ] Trilingual i18n (English / Bahasa Malaysia / Mandarin) — Hybrid AI Auto-Translation (Gemini API) with manual CMS override + UI dictionary files
 - [ ] Portfolio PDF export
 - [ ] Testimonials section
 - [ ] Speaking / appearances section
