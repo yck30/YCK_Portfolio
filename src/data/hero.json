@@ -1,0 +1,15 @@
+{
+  "eyebrow": "Web Developer & AI Builder",
+  "line1": "Strategy,",
+  "line2": "design &",
+  "line3": "motion.",
+  "subtitle": "Bridging the gap between creative vision and technical execution.",
+  "location_badge": "Based in Malaysia",
+  "scroll_badge": "Scroll to explore",
+  "copyright_text": "© 2026 CK Yong",
+  "images": [
+    { "src": "/assets/Personal_1.JPG", "position": "center 15%" },
+    { "src": "/assets/Personal_2.JPG", "position": "center 20%" },
+    { "src": "/assets/Personal_3.JPG", "position": "center 20%" }
+  ]
+}

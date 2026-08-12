@@ -2,13 +2,61 @@ import React from 'react';
 import { Navigation } from '@/components/Navigation';
 import { BackButton } from '@/components/BackButton';
 import { Footer } from '@/components/Footer';
+import { createClient } from '@/utils/supabase/server';
+import fallbackPrivacy from '@/data/privacy.json';
 
 export const metadata = {
   title: 'Privacy Policy | CK Yong',
   description: 'Privacy policy and data handling for CK Yong\'s portfolio.',
 };
 
-export default function PrivacyPage() {
+export const revalidate = 0;
+
+function parseFormattedText(text: string) {
+  const parts = text.split(/(\*\*.*?\*\*)/g);
+  return parts.map((part, i) => {
+    if (part.startsWith('**') && part.endsWith('**')) {
+      return <strong key={i} style={{ color: 'var(--color-paper)' }}>{part.slice(2, -2)}</strong>;
+    }
+    return part;
+  });
+}
+
+function renderContent(rawContent: string) {
+  const blocks = rawContent.split(/\n\n+/);
+  return blocks.map((block, idx) => {
+    const trimmed = block.trim();
+    if (trimmed.startsWith('## ')) {
+      return (
+        <h2 key={idx} style={{ fontSize: '1.5rem', marginTop: '2rem', marginBottom: '1rem', color: 'var(--color-paper)', fontFamily: 'var(--font-primary)' }}>
+          {trimmed.replace('## ', '')}
+        </h2>
+      );
+    }
+    if (trimmed.startsWith('### ')) {
+      return (
+        <h3 key={idx} style={{ fontSize: '1.2rem', marginTop: '1.5rem', marginBottom: '0.5rem', color: 'var(--color-paper)', fontFamily: 'var(--font-primary)' }}>
+          {trimmed.replace('### ', '')}
+        </h3>
+      );
+    }
+    return (
+      <p key={idx} style={{ margin: '0 0 1rem 0', lineHeight: 1.7 }}>
+        {parseFormattedText(trimmed)}
+      </p>
+    );
+  });
+}
+
+export default async function PrivacyPage() {
+  const supabase = createClient();
+  const { data: dbPrivacy } = await supabase.from('privacy_policy').select('*').single();
+
+  const title = dbPrivacy?.title || fallbackPrivacy.title;
+  const lastUpdated = dbPrivacy?.last_updated || fallbackPrivacy.last_updated;
+  const content = dbPrivacy?.content || fallbackPrivacy.content;
+  const contactEmail = dbPrivacy?.contact_email || fallbackPrivacy.contact_email;
+
   return (
     <main className="page-shell">
       <Navigation />
@@ -18,60 +66,24 @@ export default function PrivacyPage() {
           <header style={{ marginBottom: '3rem' }}>
             <BackButton href="/" label="Back to Home" />
             <h1 style={{ fontSize: 'clamp(40px, 5vw, 64px)', marginBottom: '1rem', fontFamily: 'var(--font-display)' }}>
-              Privacy Policy
+              {title}
             </h1>
             <p style={{ color: 'var(--muted)', fontSize: '1.125rem' }}>
-              Last Updated: August 2026
+              Last Updated: {lastUpdated}
             </p>
           </header>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '2.5rem', lineHeight: 1.7, fontSize: '1.05rem', color: 'var(--color-muted)' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', fontSize: '1.05rem', color: 'var(--color-muted)' }}>
             
-            <section>
-              <h2 style={{ fontSize: '1.5rem', marginBottom: '1rem', color: 'var(--color-paper)' }}>1. Introduction</h2>
-              <p>
-                Welcome to my personal portfolio and brand hub. I value your privacy and believe in full transparency regarding how your data is handled. This policy outlines what data is collected, why it is collected, and the trusted third-party services used to process it. I do not sell your personal data to advertisers or third parties.
-              </p>
-            </section>
-
-            <section>
-              <h2 style={{ fontSize: '1.5rem', marginBottom: '1rem', color: 'var(--color-paper)' }}>2. Information Collection & Usage</h2>
-              
-              <h3 style={{ fontSize: '1.2rem', marginBottom: '0.5rem', marginTop: '1.5rem', color: 'var(--color-paper)' }}>Contact Form (Formspree)</h3>
-              <p>
-                When you use the &quot;Get in touch&quot; form, you are asked to provide your <strong>Name</strong>, <strong>Email Address</strong>, and a <strong>Message</strong>. This data is securely processed by Formspree. It is used strictly for the purpose of receiving and responding to your direct inquiries.
-              </p>
-
-              <h3 style={{ fontSize: '1.2rem', marginBottom: '0.5rem', marginTop: '1.5rem', color: 'var(--color-paper)' }}>Newsletter (Buttondown)</h3>
-              <p>
-                If you choose to subscribe to the blog newsletter, your <strong>Email Address</strong> will be collected and managed via Buttondown. This information is used exclusively to send you updates when new articles are published. You may opt out and unsubscribe at any time using the link provided in every email.
-              </p>
-
-              <h3 style={{ fontSize: '1.2rem', marginBottom: '0.5rem', marginTop: '1.5rem', color: 'var(--color-paper)' }}>Website Analytics (Google Analytics 4)</h3>
-              <p>
-                To understand how visitors interact with the portfolio and improve the user experience, this site uses Google Analytics 4 (GA4). GA4 may use cookies to collect anonymous, aggregated data such as pages visited, device types, and generalized geographical locations. This data cannot be used to personally identify you.
-              </p>
-            </section>
-
-            <section>
-              <h2 style={{ fontSize: '1.5rem', marginBottom: '1rem', color: 'var(--color-paper)' }}>3. Third-Party Services</h2>
-              <p>
-                This portfolio is hosted on <strong>Vercel</strong>, which may collect standard access logs (like IP addresses) for security and operational purposes. By using this site, you also consent to the data processing practices of our service providers: Formspree (contact form), Buttondown (newsletter), and Google (analytics), in accordance with their respective privacy policies.
-              </p>
-            </section>
-
-            <section>
-              <h2 style={{ fontSize: '1.5rem', marginBottom: '1rem', color: 'var(--color-paper)' }}>4. Your Rights</h2>
-              <p>
-                You have the right to request access to, correction of, or deletion of any personal data you have directly provided to me (e.g., via the contact form or newsletter). If you wish to exercise these rights or have any questions about this Privacy Policy, please contact me directly.
-              </p>
-            </section>
+            <div>
+              {renderContent(content)}
+            </div>
 
             <section style={{ marginTop: '2rem', padding: '2rem', background: 'var(--color-glass)', borderRadius: '12px', border: '1px solid var(--color-hairline)' }}>
               <h2 style={{ fontSize: '1.25rem', marginBottom: '0.5rem', color: 'var(--color-paper)' }}>Contact Information</h2>
               <p style={{ margin: 0 }}>
                 If you have any questions or concerns, please reach out at: <br/>
-                <a href="mailto:ckyong@kitabuild.com" style={{ color: 'var(--color-paper)', textDecoration: 'underline', textUnderlineOffset: '4px' }}>ckyong@kitabuild.com</a>
+                <a href={`mailto:${contactEmail}`} style={{ color: 'var(--color-paper)', textDecoration: 'underline', textUnderlineOffset: '4px' }}>{contactEmail}</a>
               </p>
             </section>
 

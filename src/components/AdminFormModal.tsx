@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation'
 import { ImageManager } from '@/components/ImageManager'
 import { revalidateCMSContent } from '@/app/actions/revalidate'
 
-export type ContentType = 'project' | 'blog' | 'about' | 'journey' | 'pipeline' | 'credential' | 'footer';
+export type ContentType = 'project' | 'blog' | 'hero' | 'about' | 'journey' | 'pipeline' | 'credential' | 'footer' | 'footer_settings' | 'privacy';
 
 export function AdminFormModal({ 
   isOpen, 
@@ -29,10 +29,12 @@ export function AdminFormModal({
   useEffect(() => {
     if (!isOpen) return
     
-    // Set default initial state for 'about' or formatting arrays
+    // Set default initial state for single-record tables or special formatting
     if (type === 'about') {
       const bioText = Array.isArray(initialData?.bio) ? initialData.bio.join('\n\n') : (initialData?.bio || '')
       setFormData({ id: 'main', headline: '', ...initialData, bioText })
+    } else if (type === 'hero' || type === 'privacy' || type === 'footer_settings') {
+      setFormData({ id: 'main', ...initialData })
     } else {
       setFormData(initialData || {})
     }
@@ -65,11 +67,14 @@ export function AdminFormModal({
     switch (t) {
       case 'project': return 'projects'
       case 'blog': return 'blog_posts'
+      case 'hero': return 'hero_content'
       case 'about': return 'about_content'
       case 'journey': return 'journey_entries'
       case 'pipeline': return 'kitabuild_pipeline'
       case 'credential': return 'credentials'
       case 'footer': return 'footer_links'
+      case 'footer_settings': return 'footer_settings'
+      case 'privacy': return 'privacy_policy'
     }
   }
 
@@ -102,10 +107,15 @@ export function AdminFormModal({
         dataToSave.updated_at = new Date().toISOString();
       }
 
+      if (type === 'hero' || type === 'privacy' || type === 'footer_settings') {
+        dataToSave.id = 'main';
+        dataToSave.updated_at = new Date().toISOString();
+      }
+
       if (mode === 'add') {
         result = await supabase.from(table).insert(dataToSave).select().single()
       } else {
-        result = await supabase.from(table).update(dataToSave).eq('id', formData.id).select().single()
+        result = await supabase.from(table).upsert(dataToSave).select().single()
       }
 
       if (result.error) throw result.error
@@ -124,28 +134,80 @@ export function AdminFormModal({
     switch (type) {
       case 'project': return 'Project'
       case 'blog': return 'Blog Post'
+      case 'hero': return 'Hero Section'
       case 'about': return 'About Section'
       case 'journey': return 'Journey Entry'
       case 'pipeline': return 'KitaBuild Item'
       case 'credential': return 'Credential'
       case 'footer': return 'Footer Link'
+      case 'footer_settings': return 'Footer Settings'
+      case 'privacy': return 'Privacy Policy'
     }
   }
 
+  const isSingleRecordType = type === 'hero' || type === 'about' || type === 'privacy' || type === 'footer_settings';
+
   return (
     <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.8)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 1000 }}>
-      <div style={{ background: 'var(--color-bg)', padding: '32px', borderRadius: '12px', width: '100%', maxWidth: '600px', maxHeight: '90vh', overflowY: 'auto', border: '1px solid var(--color-hairline)' }}>
+      <div style={{ background: 'var(--color-bg)', padding: '32px', borderRadius: '12px', width: '100%', maxWidth: '650px', maxHeight: '90vh', overflowY: 'auto', border: '1px solid var(--color-hairline)' }}>
         <h2 style={{ marginTop: 0 }}>{mode === 'add' ? 'Add' : 'Edit'} {getTitleLabel()}</h2>
         
         <form id="admin-form-element" onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
           
-          {type !== 'about' && (
+          {!isSingleRecordType && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
               <label style={{ fontSize: '14px', color: 'var(--color-paper)', fontWeight: 500 }}>ID / Key</label>
               <input required name="id" value={formData.id || formData.slug || ''} onChange={(e) => {
                 setFormData({ ...formData, id: e.target.value, slug: e.target.value })
               }} style={{ padding: '8px 12px', borderRadius: '6px', background: 'var(--color-glass)', color: 'var(--color-paper)', border: '1px solid var(--color-hairline)', outline: 'none' }} disabled={mode === 'edit'} />
             </div>
+          )}
+
+          {/* Hero Form */}
+          {type === 'hero' && (
+            <>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                <label style={{ fontSize: '14px', color: 'var(--color-paper)', fontWeight: 500 }}>Eyebrow Badge Text</label>
+                <input required name="eyebrow" value={formData.eyebrow || ''} onChange={handleChange} placeholder="e.g. Web Developer & AI Builder" style={{ padding: '8px 12px', borderRadius: '6px', background: 'var(--color-glass)', color: 'var(--color-paper)', border: '1px solid var(--color-hairline)', outline: 'none' }} />
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '12px' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                  <label style={{ fontSize: '14px', color: 'var(--color-paper)', fontWeight: 500 }}>Headline Line 1</label>
+                  <input required name="line1" value={formData.line1 || ''} onChange={handleChange} placeholder="Strategy," style={{ padding: '8px 12px', borderRadius: '6px', background: 'var(--color-glass)', color: 'var(--color-paper)', border: '1px solid var(--color-hairline)', outline: 'none' }} />
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                  <label style={{ fontSize: '14px', color: 'var(--color-paper)', fontWeight: 500 }}>Headline Line 2</label>
+                  <input required name="line2" value={formData.line2 || ''} onChange={handleChange} placeholder="design &" style={{ padding: '8px 12px', borderRadius: '6px', background: 'var(--color-glass)', color: 'var(--color-paper)', border: '1px solid var(--color-hairline)', outline: 'none' }} />
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                  <label style={{ fontSize: '14px', color: 'var(--color-paper)', fontWeight: 500 }}>Headline Line 3 (Italicized)</label>
+                  <input required name="line3" value={formData.line3 || ''} onChange={handleChange} placeholder="motion." style={{ padding: '8px 12px', borderRadius: '6px', background: 'var(--color-glass)', color: 'var(--color-paper)', border: '1px solid var(--color-hairline)', outline: 'none' }} />
+                </div>
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                <label style={{ fontSize: '14px', color: 'var(--color-paper)', fontWeight: 500 }}>Subtitle Description</label>
+                <textarea required name="subtitle" value={formData.subtitle || ''} onChange={handleChange} rows={3} style={{ padding: '8px 12px', borderRadius: '6px', background: 'var(--color-glass)', color: 'var(--color-paper)', border: '1px solid var(--color-hairline)', outline: 'none' }} />
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '12px' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                  <label style={{ fontSize: '14px', color: 'var(--color-paper)', fontWeight: 500 }}>Location Badge</label>
+                  <input name="location_badge" value={formData.location_badge || ''} onChange={handleChange} placeholder="Based in Malaysia" style={{ padding: '8px 12px', borderRadius: '6px', background: 'var(--color-glass)', color: 'var(--color-paper)', border: '1px solid var(--color-hairline)', outline: 'none' }} />
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                  <label style={{ fontSize: '14px', color: 'var(--color-paper)', fontWeight: 500 }}>Scroll Badge</label>
+                  <input name="scroll_badge" value={formData.scroll_badge || ''} onChange={handleChange} placeholder="Scroll to explore" style={{ padding: '8px 12px', borderRadius: '6px', background: 'var(--color-glass)', color: 'var(--color-paper)', border: '1px solid var(--color-hairline)', outline: 'none' }} />
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                  <label style={{ fontSize: '14px', color: 'var(--color-paper)', fontWeight: 500 }}>Copyright Text</label>
+                  <input name="copyright_text" value={formData.copyright_text || ''} onChange={handleChange} placeholder="© 2026 CK Yong" style={{ padding: '8px 12px', borderRadius: '6px', background: 'var(--color-glass)', color: 'var(--color-paper)', border: '1px solid var(--color-hairline)', outline: 'none' }} />
+                </div>
+              </div>
+              <ImageManager
+                images={formData.images || []}
+                onChange={(images) => setFormData({ ...formData, images })}
+                label="Hero Slider Photos / Portraits"
+              />
+            </>
           )}
 
           {/* Project Form */}
@@ -224,6 +286,49 @@ export function AdminFormModal({
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 <label style={{ fontSize: '14px', color: 'var(--color-paper)', fontWeight: 500 }}>Bio Paragraphs (Separate paragraphs with a blank line)</label>
                 <textarea required name="bioText" value={formData.bioText || ''} onChange={handleChange} rows={6} style={{ padding: '8px 12px', borderRadius: '6px', background: 'var(--color-glass)', color: 'var(--color-paper)', border: '1px solid var(--color-hairline)', outline: 'none', lineHeight: 1.5 }} />
+              </div>
+            </>
+          )}
+
+          {/* Privacy Policy Form */}
+          {type === 'privacy' && (
+            <>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                <label style={{ fontSize: '14px', color: 'var(--color-paper)', fontWeight: 500 }}>Page Title</label>
+                <input required name="title" value={formData.title || ''} onChange={handleChange} placeholder="Privacy Policy" style={{ padding: '8px 12px', borderRadius: '6px', background: 'var(--color-glass)', color: 'var(--color-paper)', border: '1px solid var(--color-hairline)', outline: 'none' }} />
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                  <label style={{ fontSize: '14px', color: 'var(--color-paper)', fontWeight: 500 }}>Last Updated Date</label>
+                  <input required name="last_updated" value={formData.last_updated || ''} onChange={handleChange} placeholder="e.g. August 2026" style={{ padding: '8px 12px', borderRadius: '6px', background: 'var(--color-glass)', color: 'var(--color-paper)', border: '1px solid var(--color-hairline)', outline: 'none' }} />
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                  <label style={{ fontSize: '14px', color: 'var(--color-paper)', fontWeight: 500 }}>Contact Email</label>
+                  <input required name="contact_email" value={formData.contact_email || ''} onChange={handleChange} placeholder="ckyong@kitabuild.com" style={{ padding: '8px 12px', borderRadius: '6px', background: 'var(--color-glass)', color: 'var(--color-paper)', border: '1px solid var(--color-hairline)', outline: 'none' }} />
+                </div>
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                <label style={{ fontSize: '14px', color: 'var(--color-paper)', fontWeight: 500 }}>Policy Body Content (Markdown format)</label>
+                <span style={{ fontSize: '12px', color: 'var(--color-muted)' }}>Use <code>## Section Header</code>, <code>### Subheader</code>, and <code>**bold text**</code></span>
+                <textarea required name="content" value={formData.content || ''} onChange={handleChange} rows={12} style={{ padding: '8px 12px', borderRadius: '6px', background: 'var(--color-glass)', color: 'var(--color-paper)', border: '1px solid var(--color-hairline)', fontFamily: 'monospace', outline: 'none', lineHeight: 1.5 }} />
+              </div>
+            </>
+          )}
+
+          {/* Footer Settings Form */}
+          {type === 'footer_settings' && (
+            <>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                <label style={{ fontSize: '14px', color: 'var(--color-paper)', fontWeight: 500 }}>Footer Heading</label>
+                <input required name="heading" value={formData.heading || ''} onChange={handleChange} placeholder="Stay Connected" style={{ padding: '8px 12px', borderRadius: '6px', background: 'var(--color-glass)', color: 'var(--color-paper)', border: '1px solid var(--color-hairline)', outline: 'none' }} />
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                <label style={{ fontSize: '14px', color: 'var(--color-paper)', fontWeight: 500 }}>Footer Subtitle / Description</label>
+                <textarea required name="subtitle" value={formData.subtitle || ''} onChange={handleChange} rows={3} style={{ padding: '8px 12px', borderRadius: '6px', background: 'var(--color-glass)', color: 'var(--color-paper)', border: '1px solid var(--color-hairline)', outline: 'none' }} />
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                <label style={{ fontSize: '14px', color: 'var(--color-paper)', fontWeight: 500 }}>Copyright Text</label>
+                <input required name="copyright_text" value={formData.copyright_text || ''} onChange={handleChange} placeholder="© 2026 CK Yong. All rights reserved." style={{ padding: '8px 12px', borderRadius: '6px', background: 'var(--color-glass)', color: 'var(--color-paper)', border: '1px solid var(--color-hairline)', outline: 'none' }} />
               </div>
             </>
           )}

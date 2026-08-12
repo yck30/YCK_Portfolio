@@ -10,7 +10,19 @@ interface FooterLinkItem {
   type?: string;
 }
 
-export function FooterClient({ links }: { links: FooterLinkItem[] }) {
+export interface FooterSettings {
+  heading?: string;
+  subtitle?: string;
+  copyright_text?: string;
+}
+
+export function FooterClient({ 
+  links, 
+  settings 
+}: { 
+  links: FooterLinkItem[];
+  settings?: FooterSettings;
+}) {
   const footerRef = useRef<HTMLElement>(null)
   const glowRef = useRef<HTMLDivElement>(null)
 
@@ -65,9 +77,9 @@ export function FooterClient({ links }: { links: FooterLinkItem[] }) {
       <div className="container" style={{ position: 'relative', zIndex: 1 }}>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: '2rem' }}>
           <div>
-            <h2 style={{ marginBottom: '0.5rem' }}>Stay Connected</h2>
+            <h2 style={{ marginBottom: '0.5rem' }}>{settings?.heading || 'Stay Connected'}</h2>
             <p style={{ color: 'var(--muted)', maxWidth: '500px', margin: '0 auto' }}>
-              Have a project in mind or just want to say hi? Feel free to reach out across any of the platforms below.
+              {settings?.subtitle || 'Have a project in mind or just want to say hi? Feel free to reach out across any of the platforms below.'}
             </p>
           </div>
           
@@ -93,7 +105,7 @@ export function FooterClient({ links }: { links: FooterLinkItem[] }) {
           </div>
 
           <div style={{ marginTop: '3rem', color: 'var(--color-muted)', fontSize: '0.875rem', display: 'flex', gap: '1rem', flexWrap: 'wrap', justifyContent: 'center' }}>
-            <span>&copy; {new Date().getFullYear()} CK Yong. All rights reserved.</span>
+            <span>{settings?.copyright_text || `© ${new Date().getFullYear()} CK Yong. All rights reserved.`}</span>
             <span style={{ opacity: 0.5 }}>|</span>
             <a href="/privacy" className="footer-link" style={{ color: 'inherit', textDecoration: 'underline', textUnderlineOffset: '4px' }}>Privacy Policy</a>
             <span style={{ opacity: 0.5 }}>|</span>

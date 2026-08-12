@@ -16,11 +16,14 @@ export default async function AdminPage() {
   // Fetch initial data
   const { data: projects } = await supabase.from('projects').select('*').order('order_index', { ascending: true })
   const { data: blogPosts } = await supabase.from('blog_posts').select('*').order('published_at', { ascending: false })
+  const { data: heroContent } = await supabase.from('hero_content').select('*').single()
   const { data: aboutContent } = await supabase.from('about_content').select('*').single()
   const { data: journeyEntries } = await supabase.from('journey_entries').select('*').order('order_index', { ascending: true })
   const { data: pipelineItems } = await supabase.from('kitabuild_pipeline').select('*').order('order_index', { ascending: true })
   const { data: credentials } = await supabase.from('credentials').select('*').order('order_index', { ascending: true })
   const { data: footerLinks } = await supabase.from('footer_links').select('*').order('order_index', { ascending: true })
+  const { data: footerSettings } = await supabase.from('footer_settings').select('*').single()
+  const { data: privacyPolicy } = await supabase.from('privacy_policy').select('*').single()
 
   return (
     <div style={{ padding: '48px 24px', maxWidth: '1200px', margin: '0 auto' }}>
@@ -53,11 +56,14 @@ export default async function AdminPage() {
       <AdminDashboardClient 
         initialProjects={projects || []} 
         initialBlogPosts={blogPosts || []} 
+        initialHero={heroContent || null}
         initialAbout={aboutContent || null}
         initialJourney={journeyEntries || []}
         initialPipeline={pipelineItems || []}
         initialCredentials={credentials || []}
         initialFooterLinks={footerLinks || []}
+        initialFooterSettings={footerSettings || null}
+        initialPrivacy={privacyPolicy || null}
       />
     </div>
   )
