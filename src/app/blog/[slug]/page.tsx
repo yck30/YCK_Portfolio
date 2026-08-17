@@ -10,12 +10,33 @@ export const revalidate = 0;
 
 export default async function BlogPostDetail({ params }: { params: { slug: string } }) {
   const supabase = createClient()
+  const rawSlug = params.slug || ''
+  let decodedSlug = rawSlug
+  try {
+    decodedSlug = decodeURIComponent(rawSlug)
+  } catch (e) {
+    // ignore
+  }
   
-  // Try fetching by slug first, fallback to id match
-  let { data: post } = await supabase.from('blog_posts').select('*').eq('slug', params.slug).single()
+  // 1. Try fetching by slug with decodedSlug
+  let { data: post } = await supabase.from('blog_posts').select('*').eq('slug', decodedSlug).single()
+  if (!post && rawSlug !== decodedSlug) {
+    const { data: postByRaw } = await supabase.from('blog_posts').select('*').eq('slug', rawSlug).single()
+    post = postByRaw
+  }
+  // 2. Fallback to id match
   if (!post) {
-    const { data: postById } = await supabase.from('blog_posts').select('*').eq('id', params.slug).single()
+    const { data: postById } = await supabase.from('blog_posts').select('*').eq('id', decodedSlug).single()
     post = postById
+  }
+  // 3. Fallback to case-insensitive slug or title
+  if (!post) {
+    const { data: postByIlike } = await supabase.from('blog_posts').select('*').ilike('slug', decodedSlug).single()
+    post = postByIlike
+  }
+  if (!post) {
+    const { data: postByTitle } = await supabase.from('blog_posts').select('*').ilike('title', decodedSlug).single()
+    post = postByTitle
   }
 
   if (!post) {

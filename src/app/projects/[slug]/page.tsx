@@ -11,7 +11,34 @@ export const revalidate = 0;
 
 export default async function ProjectDetail({ params }: { params: { slug: string } }) {
   const supabase = createClient()
-  const { data: project } = await supabase.from('projects').select('*').eq('id', params.slug).single()
+  const rawSlug = params.slug || ''
+  let decodedSlug = rawSlug
+  try {
+    decodedSlug = decodeURIComponent(rawSlug)
+  } catch (e) {
+    // ignore
+  }
+
+  // 1. Exact match by decoded ID
+  let { data: project } = await supabase.from('projects').select('*').eq('id', decodedSlug).single()
+
+  // 2. Exact match by raw ID
+  if (!project && rawSlug !== decodedSlug) {
+    const { data: projectByRaw } = await supabase.from('projects').select('*').eq('id', rawSlug).single()
+    project = projectByRaw
+  }
+
+  // 3. Case-insensitive ID match
+  if (!project) {
+    const { data: projectByIlike } = await supabase.from('projects').select('*').ilike('id', decodedSlug).single()
+    project = projectByIlike
+  }
+
+  // 4. Fallback match by Title
+  if (!project) {
+    const { data: projectByTitle } = await supabase.from('projects').select('*').ilike('title', decodedSlug).single()
+    project = projectByTitle
+  }
 
   if (!project) {
     notFound()
