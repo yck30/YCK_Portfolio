@@ -43,6 +43,9 @@ export function AdminFormModal({
     } else if (type === 'pipeline') {
       const links = parseCustomLinks(initialData?.link, initialData?.cta)
       setFormData({ ...initialData, links })
+    } else if (type === 'blog') {
+      const links = parseCustomLinks(initialData?.link)
+      setFormData({ ...initialData, links })
     } else {
       setFormData(initialData || {})
     }
@@ -118,6 +121,8 @@ export function AdminFormModal({
           ? formData.tags.split(',').map((t: string) => t.trim()).filter(Boolean)
           : (Array.isArray(formData.tags) ? formData.tags : [])
         
+        const serializedLink = serializeCustomLinks(formData.links || []) || formData.link || null
+
         dataToSave = {
           id: formData.id,
           slug: formData.slug || formData.id,
@@ -125,6 +130,7 @@ export function AdminFormModal({
           excerpt: formData.excerpt || '',
           read_time: formData.read_time || '',
           tags: tags,
+          link: serializedLink,
           content: formData.content || '',
           images: Array.isArray(formData.images) ? formData.images : []
         }
@@ -222,16 +228,17 @@ export function AdminFormModal({
         result = await supabase.from(table).upsert(dataToSave).select().single()
       }
 
-      // If content column is missing in Supabase schema, retry without content and prompt
-      if (result.error && result.error.message?.includes("'content' column")) {
-        delete dataToSave.content;
+      // If content or link column is missing in Supabase schema, retry without them and prompt
+      if (result.error && (result.error.message?.includes("'content' column") || result.error.message?.includes("'link' column"))) {
+        const missingCol = result.error.message?.includes("'content' column") ? 'content' : 'link';
+        delete dataToSave[missingCol];
         if (mode === 'add') {
           result = await supabase.from(table).insert(dataToSave).select().single();
         } else {
           result = await supabase.from(table).upsert(dataToSave).select().single();
         }
         if (!result.error) {
-          alert("Saved successfully! Note: To save the detailed 'content' field in database, please run this in Supabase SQL editor: ALTER TABLE public." + table + " ADD COLUMN IF NOT EXISTS content text;");
+          alert("Saved successfully! Note: To save the '" + missingCol + "' field in database, please run this in Supabase SQL editor: ALTER TABLE public." + table + " ADD COLUMN IF NOT EXISTS " + missingCol + " text;");
         }
       }
 
@@ -394,6 +401,13 @@ export function AdminFormModal({
                 <label style={{ fontSize: '14px', color: 'var(--color-paper)', fontWeight: 500 }}>Tags (comma separated)</label>
                 <input name="tags" value={typeof formData.tags === 'string' ? formData.tags : (formData.tags?.join(', ') || '')} onChange={handleChange} style={{ padding: '8px 12px', borderRadius: '6px', background: 'var(--color-glass)', color: 'var(--color-paper)', border: '1px solid var(--color-hairline)', outline: 'none' }} />
               </div>
+              <CustomLinksEditor
+                links={formData.links || []}
+                onChange={(links) => setFormData({ ...formData, links, link: serializeCustomLinks(links) || '' })}
+                label="Resource & Reference URLs (with Descriptions)"
+                urlPlaceholder="https://..."
+                descPlaceholder="e.g. Live Demo / Source Code / Original Paper / Documentation"
+              />
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 <label style={{ fontSize: '14px', color: 'var(--color-paper)', fontWeight: 500 }}>Detailed Content (Markdown)</label>
                 <textarea name="content" value={formData.content || ''} onChange={handleChange} rows={8} style={{ padding: '8px 12px', borderRadius: '6px', background: 'var(--color-glass)', color: 'var(--color-paper)', border: '1px solid var(--color-hairline)', fontFamily: 'monospace', outline: 'none' }} />
