@@ -4,6 +4,7 @@ import { Navigation } from '@/components/Navigation'
 import { BackButton } from '@/components/BackButton'
 import { Footer } from '@/components/Footer'
 import { createClient } from '@/utils/supabase/server'
+import { parseCustomLinks, formatDisplayUrl } from '@/utils/links'
 
 export const revalidate = 0;
 
@@ -44,30 +45,46 @@ export default async function ProjectDetail({ params }: { params: { slug: string
           <p style={{ fontSize: 'clamp(18px, 2vw, 24px)', color: 'var(--color-muted)', lineHeight: 1.5, margin: 0, maxWidth: '700px' }}>
             {project.description}
           </p>
-          {project.link && project.link !== '#' && project.link.trim() !== '' && (
-            <div style={{ marginTop: '32px' }}>
-              <a 
-                href={project.link.startsWith('http') ? project.link : `https://${project.link}`} 
-                target="_blank" 
-                rel="noopener noreferrer"
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                  padding: '12px 24px',
-                  background: 'var(--color-paper)',
-                  color: 'var(--color-bg)',
-                  textDecoration: 'none',
-                  borderRadius: '999px',
-                  fontWeight: 600,
-                  fontSize: '16px',
-                }}
-              >
-                Visit Project
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
-              </a>
-            </div>
-          )}
+          {(() => {
+            const links = parseCustomLinks(project.link);
+            if (links.length === 0) return null;
+
+            return (
+              <div style={{ marginTop: '32px', display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+                {links.map((linkItem, idx) => {
+                  const fullUrl = linkItem.url.startsWith('http') ? linkItem.url : `https://${linkItem.url}`;
+                  const label = linkItem.label || (links.length === 1 ? 'Visit Project' : `Visit ${formatDisplayUrl(linkItem.url)}`);
+                  const isPrimary = idx === 0;
+
+                  return (
+                    <a 
+                      key={idx}
+                      href={fullUrl} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '8px',
+                        padding: '12px 24px',
+                        background: isPrimary ? 'var(--color-paper)' : 'var(--color-glass)',
+                        color: isPrimary ? 'var(--color-bg)' : 'var(--color-paper)',
+                        border: isPrimary ? 'none' : '1px solid var(--color-hairline)',
+                        textDecoration: 'none',
+                        borderRadius: '999px',
+                        fontWeight: 600,
+                        fontSize: '15px',
+                        transition: 'transform 0.2s ease, opacity 0.2s ease'
+                      }}
+                    >
+                      {label}
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+                    </a>
+                  );
+                })}
+              </div>
+            );
+          })()}
         </header>
 
         {project.content && (

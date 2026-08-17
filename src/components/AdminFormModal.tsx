@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react'
 import { createClient } from '@/utils/supabase/client'
 import { useRouter } from 'next/navigation'
 import { ImageManager } from '@/components/ImageManager'
+import { CustomLinksEditor } from '@/components/CustomLinksEditor'
+import { parseCustomLinks, serializeCustomLinks } from '@/utils/links'
 import { revalidateCMSContent } from '@/app/actions/revalidate'
 
 export type ContentType = 'project' | 'blog' | 'hero' | 'about' | 'journey' | 'pipeline' | 'credential' | 'footer' | 'footer_settings' | 'privacy';
@@ -35,6 +37,12 @@ export function AdminFormModal({
       setFormData({ id: 'main', headline: '', ...initialData, bioText })
     } else if (type === 'hero' || type === 'privacy' || type === 'footer_settings') {
       setFormData({ id: 'main', ...initialData })
+    } else if (type === 'project') {
+      const links = parseCustomLinks(initialData?.link)
+      setFormData({ ...initialData, links })
+    } else if (type === 'pipeline') {
+      const links = parseCustomLinks(initialData?.link, initialData?.cta)
+      setFormData({ ...initialData, links })
     } else {
       setFormData(initialData || {})
     }
@@ -85,31 +93,125 @@ export function AdminFormModal({
     try {
       let result;
       const table = getTableName(type)
-      const dataToSave = { ...formData }
+      let dataToSave: any = {}
 
       if (type === 'project') {
-        if (typeof dataToSave.features === 'string') {
-          dataToSave.features = dataToSave.features.split(',').map((f: string) => f.trim()).filter((f: string) => f)
+        const features = typeof formData.features === 'string'
+          ? formData.features.split(',').map((f: string) => f.trim()).filter(Boolean)
+          : (Array.isArray(formData.features) ? formData.features : [])
+        
+        const serializedLink = serializeCustomLinks(formData.links || []) || formData.link || ''
+
+        dataToSave = {
+          id: formData.id,
+          title: formData.title || '',
+          role: formData.role || '',
+          link: serializedLink,
+          description: formData.description || '',
+          features: features,
+          images: Array.isArray(formData.images) ? formData.images : [],
+          order_index: typeof formData.order_index === 'number' ? formData.order_index : parseInt(formData.order_index, 10) || 0
         }
-        delete dataToSave.slug;
-      }
-
-      if (type === 'blog') {
-        if (typeof dataToSave.tags === 'string') {
-          dataToSave.tags = dataToSave.tags.split(',').map((t: string) => t.trim()).filter((t: string) => t)
+      } else if (type === 'blog') {
+        const tags = typeof formData.tags === 'string'
+          ? formData.tags.split(',').map((t: string) => t.trim()).filter(Boolean)
+          : (Array.isArray(formData.tags) ? formData.tags : [])
+        
+        dataToSave = {
+          id: formData.id,
+          slug: formData.slug || formData.id,
+          title: formData.title || '',
+          excerpt: formData.excerpt || '',
+          read_time: formData.read_time || '',
+          tags: tags,
+          content: formData.content || '',
+          images: Array.isArray(formData.images) ? formData.images : []
         }
-      }
+      } else if (type === 'hero') {
+        dataToSave = {
+          id: 'main',
+          eyebrow: formData.eyebrow || '',
+          line1: formData.line1 || '',
+          line2: formData.line2 || '',
+          line3: formData.line3 || '',
+          subtitle: formData.subtitle || '',
+          location_badge: formData.location_badge || '',
+          scroll_badge: formData.scroll_badge || '',
+          copyright_text: formData.copyright_text || '',
+          images: Array.isArray(formData.images) ? formData.images : [],
+          updated_at: new Date().toISOString()
+        }
+      } else if (type === 'about') {
+        const bio = (formData.bioText || '')
+          .split(/\n\n+/)
+          .map((p: string) => p.trim())
+          .filter(Boolean)
 
-      if (type === 'about') {
-        dataToSave.id = 'main';
-        dataToSave.bio = (dataToSave.bioText || '').split(/\n\n+/).map((p: string) => p.trim()).filter((p: string) => p);
-        delete dataToSave.bioText;
-        dataToSave.updated_at = new Date().toISOString();
-      }
+        dataToSave = {
+          id: 'main',
+          headline: formData.headline || '',
+          bio: bio.length > 0 ? bio : (Array.isArray(formData.bio) ? formData.bio : []),
+          updated_at: new Date().toISOString()
+        }
+      } else if (type === 'journey') {
+        dataToSave = {
+          id: formData.id,
+          year: formData.year || '',
+          title: formData.title || '',
+          company: formData.company || '',
+          description: formData.description || '',
+          link: formData.link ? formData.link.trim() : null,
+          order_index: typeof formData.order_index === 'number' ? formData.order_index : parseInt(formData.order_index, 10) || 0
+        }
+      } else if (type === 'pipeline') {
+        const serializedLink = serializeCustomLinks(formData.links || []) || formData.link || null
+        const primaryCta = (formData.links && formData.links.length > 0 && formData.links[0].label)
+          ? formData.links[0].label
+          : (formData.cta ? formData.cta.trim() : null)
 
-      if (type === 'hero' || type === 'privacy' || type === 'footer_settings') {
-        dataToSave.id = 'main';
-        dataToSave.updated_at = new Date().toISOString();
+        dataToSave = {
+          id: formData.id,
+          title: formData.title || '',
+          description: formData.description || '',
+          status: formData.status || 'Coming Soon',
+          link: serializedLink,
+          cta: primaryCta,
+          order_index: typeof formData.order_index === 'number' ? formData.order_index : parseInt(formData.order_index, 10) || 0
+        }
+      } else if (type === 'credential') {
+        dataToSave = {
+          id: formData.id,
+          category: formData.category || '',
+          title: formData.title || '',
+          issuer: formData.issuer ? formData.issuer.trim() : null,
+          year: formData.year || '',
+          order_index: typeof formData.order_index === 'number' ? formData.order_index : parseInt(formData.order_index, 10) || 0
+        }
+      } else if (type === 'footer') {
+        dataToSave = {
+          id: formData.id,
+          label: formData.label || '',
+          url: formData.url || '',
+          type: formData.type || 'social',
+          order_index: typeof formData.order_index === 'number' ? formData.order_index : parseInt(formData.order_index, 10) || 0
+        }
+      } else if (type === 'footer_settings') {
+        dataToSave = {
+          id: 'main',
+          heading: formData.heading || '',
+          subtitle: formData.subtitle || '',
+          copyright_text: formData.copyright_text || '',
+          updated_at: new Date().toISOString()
+        }
+      } else if (type === 'privacy') {
+        dataToSave = {
+          id: 'main',
+          title: formData.title || '',
+          last_updated: formData.last_updated || '',
+          contact_email: formData.contact_email || '',
+          content: formData.content || '',
+          updated_at: new Date().toISOString()
+        }
       }
 
       if (mode === 'add') {
@@ -157,8 +259,13 @@ export function AdminFormModal({
           {!isSingleRecordType && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
               <label style={{ fontSize: '14px', color: 'var(--color-paper)', fontWeight: 500 }}>ID / Key</label>
-              <input required name="id" value={formData.id || formData.slug || ''} onChange={(e) => {
-                setFormData({ ...formData, id: e.target.value, slug: e.target.value })
+              <input required name="id" value={formData.id || (type === 'blog' ? formData.slug : '') || ''} onChange={(e) => {
+                const val = e.target.value;
+                if (type === 'blog') {
+                  setFormData({ ...formData, id: val, slug: val });
+                } else {
+                  setFormData({ ...formData, id: val });
+                }
               }} style={{ padding: '8px 12px', borderRadius: '6px', background: 'var(--color-glass)', color: 'var(--color-paper)', border: '1px solid var(--color-hairline)', outline: 'none' }} disabled={mode === 'edit'} />
             </div>
           )}
@@ -222,13 +329,16 @@ export function AdminFormModal({
                 <input required name="role" value={formData.role || ''} onChange={handleChange} style={{ padding: '8px 12px', borderRadius: '6px', background: 'var(--color-glass)', color: 'var(--color-paper)', border: '1px solid var(--color-hairline)', outline: 'none' }} />
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                <label style={{ fontSize: '14px', color: 'var(--color-paper)', fontWeight: 500 }}>Link (URL)</label>
-                <input required name="link" value={formData.link || ''} onChange={handleChange} style={{ padding: '8px 12px', borderRadius: '6px', background: 'var(--color-glass)', color: 'var(--color-paper)', border: '1px solid var(--color-hairline)', outline: 'none' }} />
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 <label style={{ fontSize: '14px', color: 'var(--color-paper)', fontWeight: 500 }}>Short Description (Main Page)</label>
                 <textarea required name="description" value={formData.description || ''} onChange={handleChange} rows={3} style={{ padding: '8px 12px', borderRadius: '6px', background: 'var(--color-glass)', color: 'var(--color-paper)', border: '1px solid var(--color-hairline)', outline: 'none' }} />
               </div>
+              <CustomLinksEditor
+                links={formData.links || []}
+                onChange={(links) => setFormData({ ...formData, links, link: serializeCustomLinks(links) || '' })}
+                label="Project URLs & Descriptions"
+                urlPlaceholder="https://your-project.com"
+                descPlaceholder="e.g. Live Demo / Source Code / Web App"
+              />
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 <label style={{ fontSize: '14px', color: 'var(--color-paper)', fontWeight: 500 }}>Features (comma separated)</label>
                 <textarea name="features" value={typeof formData.features === 'string' ? formData.features : (formData.features?.join(', ') || '')} onChange={handleChange} rows={2} style={{ padding: '8px 12px', borderRadius: '6px', background: 'var(--color-glass)', color: 'var(--color-paper)', border: '1px solid var(--color-hairline)', outline: 'none' }} />
@@ -383,14 +493,13 @@ export function AdminFormModal({
                   <option value="Coming Soon" style={{ background: '#1c1c1e' }}>Coming Soon</option>
                 </select>
               </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                <label style={{ fontSize: '14px', color: 'var(--color-paper)', fontWeight: 500 }}>URL Link (Optional)</label>
-                <input name="link" value={formData.link || ''} onChange={handleChange} style={{ padding: '8px 12px', borderRadius: '6px', background: 'var(--color-glass)', color: 'var(--color-paper)', border: '1px solid var(--color-hairline)', outline: 'none' }} />
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                <label style={{ fontSize: '14px', color: 'var(--color-paper)', fontWeight: 500 }}>CTA Button Text (Optional)</label>
-                <input name="cta" value={formData.cta || ''} onChange={handleChange} placeholder="e.g. Explore the Map" style={{ padding: '8px 12px', borderRadius: '6px', background: 'var(--color-glass)', color: 'var(--color-paper)', border: '1px solid var(--color-hairline)', outline: 'none' }} />
-              </div>
+              <CustomLinksEditor
+                links={formData.links || []}
+                onChange={(links) => setFormData({ ...formData, links, link: serializeCustomLinks(links) || '', cta: links[0]?.label || '' })}
+                label="Pipeline Action URLs & Descriptions"
+                urlPlaceholder="https://kitabuild.com/..."
+                descPlaceholder="e.g. Explore the Map / Visit Website / Enquire"
+              />
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 <label style={{ fontSize: '14px', color: 'var(--color-paper)', fontWeight: 500 }}>Order Index</label>
                 <input type="number" name="order_index" value={formData.order_index ?? 0} onChange={handleChange} style={{ padding: '8px 12px', borderRadius: '6px', background: 'var(--color-glass)', color: 'var(--color-paper)', border: '1px solid var(--color-hairline)', outline: 'none' }} />
