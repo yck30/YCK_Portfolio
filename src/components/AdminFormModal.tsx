@@ -94,7 +94,7 @@ export function AdminFormModal({
     setIsSubmitting(true)
     
     try {
-      let result;
+      let result: any = null
       const table = getTableName(type)
       let dataToSave: any = {}
 
@@ -221,28 +221,45 @@ export function AdminFormModal({
         }
       }
 
-      if (mode === 'add') {
-        result = await supabase.from(table).insert(dataToSave).select().single()
-      } else {
-        result = await supabase.from(table).upsert(dataToSave).select().single()
-      }
+      let success = false
+      let lastError: any = null
+      let attempts = 0
+      const maxAttempts = 6
+      const missingColumns: string[] = []
 
-      // If content or link column is missing in Supabase schema, retry without them and prompt
-      if (result.error && (result.error.message?.includes("'content' column") || result.error.message?.includes("'link' column"))) {
-        const missingCol = result.error.message?.includes("'content' column") ? 'content' : 'link';
-        delete dataToSave[missingCol];
+      while (!success && attempts < maxAttempts) {
+        attempts++
         if (mode === 'add') {
-          result = await supabase.from(table).insert(dataToSave).select().single();
+          result = await supabase.from(table).insert(dataToSave).select().single()
         } else {
-          result = await supabase.from(table).upsert(dataToSave).select().single();
+          result = await supabase.from(table).upsert(dataToSave).select().single()
         }
-        if (!result.error) {
-          alert("Saved successfully! Note: To save the '" + missingCol + "' field in database, please run this in Supabase SQL editor: ALTER TABLE public." + table + " ADD COLUMN IF NOT EXISTS " + missingCol + " text;");
+
+        if (result.error) {
+          lastError = result.error
+          const msg = result.error.message || ''
+          const match = msg.match(/Could not find the '([^']+)' column of/i) ||
+                        msg.match(/column "([^"]+)" of relation/i) ||
+                        msg.match(/column '([^']+)' does not exist/i) ||
+                        msg.match(/Could not find the ([a-zA-Z0-9_]+) column/i)
+
+          if (match && match[1] && dataToSave[match[1]] !== undefined) {
+            const missingCol = match[1]
+            missingColumns.push(missingCol)
+            delete dataToSave[missingCol]
+            continue
+          } else {
+            break
+          }
+        } else {
+          success = true
         }
       }
 
-      if (result.error) throw result.error
-      onSuccess(result.data)
+      if (!success) {
+        throw lastError || new Error('Failed to save data')
+      }
+      onSuccess(result?.data || dataToSave)
       await revalidateCMSContent()
       onClose()
       router.refresh()
