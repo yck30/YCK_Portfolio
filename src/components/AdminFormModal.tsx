@@ -180,7 +180,6 @@ export function AdminFormModal({
           id: formData.id,
           title: formData.title || '',
           description: formData.description || '',
-          content: formData.content ? formData.content.trim() : null,
           status: formData.status || 'Coming Soon',
           link: serializedLink,
           cta: primaryCta,
@@ -515,12 +514,8 @@ export function AdminFormModal({
                 <input required name="title" value={formData.title || ''} onChange={handleChange} style={{ padding: '8px 12px', borderRadius: '6px', background: 'var(--color-glass)', color: 'var(--color-paper)', border: '1px solid var(--color-hairline)', outline: 'none' }} />
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                <label style={{ fontSize: '14px', color: 'var(--color-paper)', fontWeight: 500 }}>Short Description (Homepage Card)</label>
+                <label style={{ fontSize: '14px', color: 'var(--color-paper)', fontWeight: 500 }}>Description (Homepage Card)</label>
                 <textarea required name="description" value={formData.description || ''} onChange={handleChange} rows={3} placeholder="Brief summary of what this pipeline item is..." style={{ padding: '8px 12px', borderRadius: '6px', background: 'var(--color-glass)', color: 'var(--color-paper)', border: '1px solid var(--color-hairline)', outline: 'none' }} />
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                <label style={{ fontSize: '14px', color: 'var(--color-paper)', fontWeight: 500 }}>Extended / Detailed Description (Optional)</label>
-                <textarea name="content" value={formData.content || ''} onChange={handleChange} rows={5} placeholder="Additional details, scope, launch notes, or target audience..." style={{ padding: '8px 12px', borderRadius: '6px', background: 'var(--color-glass)', color: 'var(--color-paper)', border: '1px solid var(--color-hairline)', outline: 'none', lineHeight: 1.5 }} />
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 <label style={{ fontSize: '14px', color: 'var(--color-paper)', fontWeight: 500 }}>Status</label>
