@@ -108,6 +108,7 @@ export function AdminFormModal({
           role: formData.role || '',
           link: serializedLink,
           description: formData.description || '',
+          content: formData.content || '',
           features: features,
           images: Array.isArray(formData.images) ? formData.images : [],
           order_index: typeof formData.order_index === 'number' ? formData.order_index : parseInt(formData.order_index, 10) || 0
@@ -173,6 +174,7 @@ export function AdminFormModal({
           id: formData.id,
           title: formData.title || '',
           description: formData.description || '',
+          content: formData.content ? formData.content.trim() : null,
           status: formData.status || 'Coming Soon',
           link: serializedLink,
           cta: primaryCta,
@@ -218,6 +220,19 @@ export function AdminFormModal({
         result = await supabase.from(table).insert(dataToSave).select().single()
       } else {
         result = await supabase.from(table).upsert(dataToSave).select().single()
+      }
+
+      // If content column is missing in Supabase schema, retry without content and prompt
+      if (result.error && result.error.message?.includes("'content' column")) {
+        delete dataToSave.content;
+        if (mode === 'add') {
+          result = await supabase.from(table).insert(dataToSave).select().single();
+        } else {
+          result = await supabase.from(table).upsert(dataToSave).select().single();
+        }
+        if (!result.error) {
+          alert("Saved successfully! Note: To save the detailed 'content' field in database, please run this in Supabase SQL editor: ALTER TABLE public." + table + " ADD COLUMN IF NOT EXISTS content text;");
+        }
       }
 
       if (result.error) throw result.error
@@ -329,8 +344,13 @@ export function AdminFormModal({
                 <input required name="role" value={formData.role || ''} onChange={handleChange} style={{ padding: '8px 12px', borderRadius: '6px', background: 'var(--color-glass)', color: 'var(--color-paper)', border: '1px solid var(--color-hairline)', outline: 'none' }} />
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                <label style={{ fontSize: '14px', color: 'var(--color-paper)', fontWeight: 500 }}>Short Description (Main Page)</label>
-                <textarea required name="description" value={formData.description || ''} onChange={handleChange} rows={3} style={{ padding: '8px 12px', borderRadius: '6px', background: 'var(--color-glass)', color: 'var(--color-paper)', border: '1px solid var(--color-hairline)', outline: 'none' }} />
+                <label style={{ fontSize: '14px', color: 'var(--color-paper)', fontWeight: 500 }}>Short Description (Homepage Bento Card)</label>
+                <textarea required name="description" value={formData.description || ''} onChange={handleChange} rows={3} placeholder="Brief 1-2 sentence overview for the homepage card..." style={{ padding: '8px 12px', borderRadius: '6px', background: 'var(--color-glass)', color: 'var(--color-paper)', border: '1px solid var(--color-hairline)', outline: 'none' }} />
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                <label style={{ fontSize: '14px', color: 'var(--color-paper)', fontWeight: 500 }}>Details Page Full Description / Case Study Content (Markdown)</label>
+                <span style={{ fontSize: '12px', color: 'var(--color-muted)' }}>Detailed text, project background, or case study displayed on the project page (<code>/projects/[slug]</code>)</span>
+                <textarea name="content" value={formData.content || ''} onChange={handleChange} rows={7} placeholder="Write detailed background, case study overview, problem/solution, architecture, or outcomes..." style={{ padding: '8px 12px', borderRadius: '6px', background: 'var(--color-glass)', color: 'var(--color-paper)', border: '1px solid var(--color-hairline)', fontFamily: 'monospace', outline: 'none', lineHeight: 1.5 }} />
               </div>
               <CustomLinksEditor
                 links={formData.links || []}
@@ -340,8 +360,8 @@ export function AdminFormModal({
                 descPlaceholder="e.g. Live Demo / Source Code / Web App"
               />
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                <label style={{ fontSize: '14px', color: 'var(--color-paper)', fontWeight: 500 }}>Features (comma separated)</label>
-                <textarea name="features" value={typeof formData.features === 'string' ? formData.features : (formData.features?.join(', ') || '')} onChange={handleChange} rows={2} style={{ padding: '8px 12px', borderRadius: '6px', background: 'var(--color-glass)', color: 'var(--color-paper)', border: '1px solid var(--color-hairline)', outline: 'none' }} />
+                <label style={{ fontSize: '14px', color: 'var(--color-paper)', fontWeight: 500 }}>Key Features (comma separated)</label>
+                <textarea name="features" value={typeof formData.features === 'string' ? formData.features : (formData.features?.join(', ') || '')} onChange={handleChange} rows={2} placeholder="Feature 1, Feature 2, Feature 3..." style={{ padding: '8px 12px', borderRadius: '6px', background: 'var(--color-glass)', color: 'var(--color-paper)', border: '1px solid var(--color-hairline)', outline: 'none' }} />
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 <label style={{ fontSize: '14px', color: 'var(--color-paper)', fontWeight: 500 }}>Order Index</label>
@@ -481,8 +501,12 @@ export function AdminFormModal({
                 <input required name="title" value={formData.title || ''} onChange={handleChange} style={{ padding: '8px 12px', borderRadius: '6px', background: 'var(--color-glass)', color: 'var(--color-paper)', border: '1px solid var(--color-hairline)', outline: 'none' }} />
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                <label style={{ fontSize: '14px', color: 'var(--color-paper)', fontWeight: 500 }}>Description</label>
-                <textarea required name="description" value={formData.description || ''} onChange={handleChange} rows={3} style={{ padding: '8px 12px', borderRadius: '6px', background: 'var(--color-glass)', color: 'var(--color-paper)', border: '1px solid var(--color-hairline)', outline: 'none' }} />
+                <label style={{ fontSize: '14px', color: 'var(--color-paper)', fontWeight: 500 }}>Short Description (Homepage Card)</label>
+                <textarea required name="description" value={formData.description || ''} onChange={handleChange} rows={3} placeholder="Brief summary of what this pipeline item is..." style={{ padding: '8px 12px', borderRadius: '6px', background: 'var(--color-glass)', color: 'var(--color-paper)', border: '1px solid var(--color-hairline)', outline: 'none' }} />
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                <label style={{ fontSize: '14px', color: 'var(--color-paper)', fontWeight: 500 }}>Extended / Detailed Description (Optional)</label>
+                <textarea name="content" value={formData.content || ''} onChange={handleChange} rows={5} placeholder="Additional details, scope, launch notes, or target audience..." style={{ padding: '8px 12px', borderRadius: '6px', background: 'var(--color-glass)', color: 'var(--color-paper)', border: '1px solid var(--color-hairline)', outline: 'none', lineHeight: 1.5 }} />
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 <label style={{ fontSize: '14px', color: 'var(--color-paper)', fontWeight: 500 }}>Status</label>
