@@ -164,7 +164,7 @@ ON CONFLICT (id) DO NOTHING;
 -- Seed Footer Links
 INSERT INTO public.footer_links (id, label, url, type, order_index) VALUES
 ('fl1', 'Email', 'mailto:ckyong@kitabuild.com', 'contact', 1),
-('fl2', 'WhatsApp', 'https://wa.me/60164221791', 'contact', 2),
+('fl2', 'WhatsApp', 'https://wa.me/60189896411', 'contact', 2),
 ('fl3', 'GitHub', 'https://github.com/yck30', 'social', 3),
 ('fl4', 'LinkedIn', 'https://www.linkedin.com/in/chunkityong', 'social', 4),
 ('fl5', 'TikTok', 'https://www.tiktok.com/@yck96', 'social', 5),

@@ -4,7 +4,7 @@ import { FooterClient } from './FooterClient'
 
 const fallbackLinks = [
   { label: 'Email', url: 'mailto:ckyong@kitabuild.com', type: 'contact' },
-  { label: 'WhatsApp', url: 'https://wa.me/60164221791', type: 'contact' },
+  { label: 'WhatsApp', url: 'https://wa.me/60189896411', type: 'contact' },
   { label: 'GitHub', url: 'https://github.com/yck30', type: 'social' },
   { label: 'LinkedIn', url: 'https://www.linkedin.com/in/chunkityong', type: 'social' },
   { label: 'TikTok', url: 'https://www.tiktok.com/@yck96', type: 'social' },
