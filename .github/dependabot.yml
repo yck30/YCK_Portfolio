@@ -26,6 +26,12 @@ updates:
         update-types: ["version-update:semver-major"]
       - dependency-name: "eslint-config-next"
         update-types: ["version-update:semver-major"]
+      # Next.js major upgrades (e.g., 14 -> 15/16) require synchronized upgrades to React 19,
+      # Turbopack migration, and @next/mdx. Ignore automated major updates.
+      - dependency-name: "next"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "@next/*"
+        update-types: ["version-update:semver-major"]
     # Group minor and patch updates to reduce PR noise
     groups:
       react-ecosystem:
