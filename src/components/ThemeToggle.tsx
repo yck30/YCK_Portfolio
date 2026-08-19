@@ -12,7 +12,7 @@ export function ThemeToggle() {
   useEffect(() => setMounted(true), [])
 
   if (!mounted) {
-    return <div style={{ width: '40px', height: '40px' }} />
+    return <div style={{ width: '40px', height: '40px', marginRight: '12px' }} />
   }
 
   const toggleTheme = () => {

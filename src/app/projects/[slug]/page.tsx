@@ -5,6 +5,7 @@ import { BackButton } from '@/components/BackButton'
 import { Footer } from '@/components/Footer'
 import { createClient } from '@/utils/supabase/server'
 import { parseCustomLinks, formatDisplayUrl } from '@/utils/links'
+import { MarkdownRenderer } from '@/components/MarkdownRenderer'
 
 export const revalidate = 0;
 
@@ -115,8 +116,8 @@ export default async function ProjectDetail({ params }: { params: { slug: string
         </header>
 
         {project.content && (
-          <div style={{ marginBottom: '64px', fontSize: '18px', color: 'var(--color-paper)', lineHeight: 1.6, whiteSpace: 'pre-wrap', maxWidth: '800px' }}>
-            {project.content}
+          <div style={{ marginBottom: '64px', maxWidth: '800px' }}>
+            <MarkdownRenderer content={project.content} />
           </div>
         )}
 

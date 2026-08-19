@@ -98,7 +98,7 @@ export function BlogListClient({ posts }: { posts: BlogPost[] }) {
           filteredPosts.map((post) => (
             <Link key={post.id} href={`/blog/${post.slug}`} className="editorial-item">
               <span className="editorial-date">
-                {new Date(post.published_at).toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' })}
+                {new Date(post.published_at).toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric', timeZone: 'UTC' })}
                 {post.read_time && <span style={{ marginLeft: '12px', opacity: 0.6 }}>· {post.read_time}</span>}
               </span>
               <div className="editorial-content">

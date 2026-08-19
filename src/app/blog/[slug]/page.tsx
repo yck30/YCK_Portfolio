@@ -5,6 +5,7 @@ import { BackButton } from '@/components/BackButton'
 import { Footer } from '@/components/Footer'
 import { createClient } from '@/utils/supabase/server'
 import { parseCustomLinks, formatDisplayUrl } from '@/utils/links'
+import { MarkdownRenderer } from '@/components/MarkdownRenderer'
 
 export const revalidate = 0;
 
@@ -44,7 +45,7 @@ export default async function BlogPostDetail({ params }: { params: { slug: strin
   }
 
   const formattedDate = post.published_at 
-    ? new Date(post.published_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
+    ? new Date(post.published_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' })
     : ''
 
   const links = parseCustomLinks(post.link);
@@ -186,17 +187,8 @@ export default async function BlogPostDetail({ params }: { params: { slug: strin
 
         {/* Blog Post Main Content */}
         {post.content && (
-          <div 
-            style={{ 
-              fontSize: '18px', 
-              color: 'var(--color-paper)', 
-              lineHeight: 1.7, 
-              whiteSpace: 'pre-wrap',
-              fontFamily: 'var(--font-primary)',
-              marginBottom: '48px'
-            }}
-          >
-            {post.content}
+          <div style={{ marginBottom: '48px' }}>
+            <MarkdownRenderer content={post.content} />
           </div>
         )}
 

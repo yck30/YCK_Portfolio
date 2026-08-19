@@ -58,6 +58,8 @@ export function JourneyClient({ items }: { items: any[] }) {
       <>
         {Array.from({ length: 140 }).map((_, i) => {
           const angle = i * (360 / 140)
+          const pseudoVariance = Math.abs(Math.sin(i * 12.9898))
+          const opacity = Number((0.15 + pseudoVariance * 0.3).toFixed(3))
           
           return (
             <div
@@ -72,7 +74,7 @@ export function JourneyClient({ items }: { items: any[] }) {
                 borderRadius: '50%',
                 boxShadow: '0 0 15px 4px rgba(216, 180, 254, 0.5)',
                 transform: `translate(-50%, -50%) rotateY(${angle}deg) translateZ(${radius}px)`,
-                opacity: 0.15 + Math.random() * 0.3
+                opacity
               }}
             />
           )

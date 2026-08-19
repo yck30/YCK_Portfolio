@@ -4,7 +4,13 @@ import { ThemeProvider as NextThemesProvider } from "next-themes";
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   return (
-    <NextThemesProvider attribute="data-theme" defaultTheme="dark" disableTransitionOnChange={false}>
+    <NextThemesProvider
+      attribute="data-theme"
+      defaultTheme="dark"
+      enableColorScheme={false}
+      enableSystem={false}
+      disableTransitionOnChange={false}
+    >
       {children}
     </NextThemesProvider>
   );

@@ -5,6 +5,7 @@ import { ImageManager } from '@/components/ImageManager'
 import { CustomLinksEditor } from '@/components/CustomLinksEditor'
 import { parseCustomLinks, serializeCustomLinks } from '@/utils/links'
 import { revalidateCMSContent } from '@/app/actions/revalidate'
+import { MarkdownFieldEditor } from '@/components/MarkdownFieldEditor'
 
 export type ContentType = 'project' | 'blog' | 'hero' | 'about' | 'journey' | 'pipeline' | 'credential' | 'footer' | 'footer_settings' | 'privacy';
 
@@ -370,11 +371,15 @@ export function AdminFormModal({
                 <label style={{ fontSize: '14px', color: 'var(--color-paper)', fontWeight: 500 }}>Short Description (Homepage Bento Card)</label>
                 <textarea required name="description" value={formData.description || ''} onChange={handleChange} rows={3} placeholder="Brief 1-2 sentence overview for the homepage card..." style={{ padding: '8px 12px', borderRadius: '6px', background: 'var(--color-glass)', color: 'var(--color-paper)', border: '1px solid var(--color-hairline)', outline: 'none' }} />
               </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                <label style={{ fontSize: '14px', color: 'var(--color-paper)', fontWeight: 500 }}>Details Page Full Description / Case Study Content (Markdown)</label>
-                <span style={{ fontSize: '12px', color: 'var(--color-muted)' }}>Detailed text, project background, or case study displayed on the project page (<code>/projects/[slug]</code>)</span>
-                <textarea name="content" value={formData.content || ''} onChange={handleChange} rows={7} placeholder="Write detailed background, case study overview, problem/solution, architecture, or outcomes..." style={{ padding: '8px 12px', borderRadius: '6px', background: 'var(--color-glass)', color: 'var(--color-paper)', border: '1px solid var(--color-hairline)', fontFamily: 'monospace', outline: 'none', lineHeight: 1.5 }} />
-              </div>
+              <MarkdownFieldEditor
+                label="Details Page Full Description / Case Study Content (Markdown)"
+                name="content"
+                value={formData.content || ''}
+                onChange={handleChange}
+                rows={8}
+                placeholder="Write detailed background, case study overview, problem/solution, architecture, or outcomes..."
+                hint="Displayed on the project details page (/projects/[slug]). You can format sections, bold key terms, add links, bullet points, and code."
+              />
               <CustomLinksEditor
                 links={formData.links || []}
                 onChange={(links) => setFormData({ ...formData, links, link: serializeCustomLinks(links) || '' })}
@@ -424,10 +429,15 @@ export function AdminFormModal({
                 urlPlaceholder="https://..."
                 descPlaceholder="e.g. Live Demo / Source Code / Original Paper / Documentation"
               />
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                <label style={{ fontSize: '14px', color: 'var(--color-paper)', fontWeight: 500 }}>Detailed Content (Markdown)</label>
-                <textarea name="content" value={formData.content || ''} onChange={handleChange} rows={8} style={{ padding: '8px 12px', borderRadius: '6px', background: 'var(--color-glass)', color: 'var(--color-paper)', border: '1px solid var(--color-hairline)', fontFamily: 'monospace', outline: 'none' }} />
-              </div>
+              <MarkdownFieldEditor
+                label="Detailed Content (Markdown)"
+                name="content"
+                value={formData.content || ''}
+                onChange={handleChange}
+                rows={10}
+                placeholder="Write the full blog article content here..."
+                hint="Displayed on the blog post detail page (/blog/[slug]). Supports headings, quotes, code snippets, lists, bold text, and links."
+              />
               <ImageManager
                 images={formData.images || []}
                 onChange={(images) => setFormData({ ...formData, images })}
@@ -467,11 +477,16 @@ export function AdminFormModal({
                   <input required name="contact_email" value={formData.contact_email || ''} onChange={handleChange} placeholder="ckyong@kitabuild.com" style={{ padding: '8px 12px', borderRadius: '6px', background: 'var(--color-glass)', color: 'var(--color-paper)', border: '1px solid var(--color-hairline)', outline: 'none' }} />
                 </div>
               </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                <label style={{ fontSize: '14px', color: 'var(--color-paper)', fontWeight: 500 }}>Policy Body Content (Markdown format)</label>
-                <span style={{ fontSize: '12px', color: 'var(--color-muted)' }}>Use <code>## Section Header</code>, <code>### Subheader</code>, and <code>**bold text**</code></span>
-                <textarea required name="content" value={formData.content || ''} onChange={handleChange} rows={12} style={{ padding: '8px 12px', borderRadius: '6px', background: 'var(--color-glass)', color: 'var(--color-paper)', border: '1px solid var(--color-hairline)', fontFamily: 'monospace', outline: 'none', lineHeight: 1.5 }} />
-              </div>
+              <MarkdownFieldEditor
+                required
+                label="Policy Body Content (Markdown format)"
+                name="content"
+                value={formData.content || ''}
+                onChange={handleChange}
+                rows={12}
+                placeholder="Write the full privacy policy terms here..."
+                hint="Displayed on /privacy. Use ## for major section headers, ### for subheadings, **bold**, and bullet lists."
+              />
             </>
           )}
 

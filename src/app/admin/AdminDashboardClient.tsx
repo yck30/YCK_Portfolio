@@ -8,6 +8,7 @@ import { ConfirmModal } from '@/components/ConfirmModal'
 import { revalidateCMSContent } from '@/app/actions/revalidate'
 import { GripVertical, ChevronUp, ChevronDown, Check, Loader2, Link as LinkIcon } from 'lucide-react'
 import { parseCustomLinks } from '@/utils/links'
+import { MarkdownRenderer } from '@/components/MarkdownRenderer'
 
 interface AdminDashboardProps {
   initialProjects: any[];
@@ -1096,8 +1097,12 @@ export function AdminDashboardClient({
             </div>
             <div>
               <span style={{ fontSize: '12px', color: 'var(--color-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Policy Body Preview</span>
-              <div style={{ marginTop: '8px', padding: '16px', borderRadius: '8px', background: 'rgba(0,0,0,0.3)', border: '1px solid var(--color-hairline)', fontSize: '13px', color: 'var(--color-muted)', maxHeight: '200px', overflowY: 'auto', whiteSpace: 'pre-wrap', fontFamily: 'monospace' }}>
-                {privacy?.content || 'No custom privacy content set.'}
+              <div style={{ marginTop: '8px', padding: '16px', borderRadius: '8px', background: 'rgba(0,0,0,0.3)', border: '1px solid var(--color-hairline)', fontSize: '13px', maxHeight: '250px', overflowY: 'auto' }}>
+                {privacy?.content ? (
+                  <MarkdownRenderer content={privacy.content} style={{ fontSize: '13px', gap: '0.75rem' }} />
+                ) : (
+                  <span style={{ color: 'var(--color-muted)' }}>No custom privacy content set.</span>
+                )}
               </div>
             </div>
           </div>

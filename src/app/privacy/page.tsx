@@ -3,6 +3,7 @@ import { Navigation } from '@/components/Navigation';
 import { BackButton } from '@/components/BackButton';
 import { Footer } from '@/components/Footer';
 import { createClient } from '@/utils/supabase/server';
+import { MarkdownRenderer } from '@/components/MarkdownRenderer';
 import fallbackPrivacy from '@/data/privacy.json';
 
 export const metadata = {
@@ -11,42 +12,6 @@ export const metadata = {
 };
 
 export const revalidate = 0;
-
-function parseFormattedText(text: string) {
-  const parts = text.split(/(\*\*.*?\*\*)/g);
-  return parts.map((part, i) => {
-    if (part.startsWith('**') && part.endsWith('**')) {
-      return <strong key={i} style={{ color: 'var(--color-paper)' }}>{part.slice(2, -2)}</strong>;
-    }
-    return part;
-  });
-}
-
-function renderContent(rawContent: string) {
-  const blocks = rawContent.split(/\n\n+/);
-  return blocks.map((block, idx) => {
-    const trimmed = block.trim();
-    if (trimmed.startsWith('## ')) {
-      return (
-        <h2 key={idx} style={{ fontSize: '1.5rem', marginTop: '2rem', marginBottom: '1rem', color: 'var(--color-paper)', fontFamily: 'var(--font-primary)' }}>
-          {trimmed.replace('## ', '')}
-        </h2>
-      );
-    }
-    if (trimmed.startsWith('### ')) {
-      return (
-        <h3 key={idx} style={{ fontSize: '1.2rem', marginTop: '1.5rem', marginBottom: '0.5rem', color: 'var(--color-paper)', fontFamily: 'var(--font-primary)' }}>
-          {trimmed.replace('### ', '')}
-        </h3>
-      );
-    }
-    return (
-      <p key={idx} style={{ margin: '0 0 1rem 0', lineHeight: 1.7 }}>
-        {parseFormattedText(trimmed)}
-      </p>
-    );
-  });
-}
 
 export default async function PrivacyPage() {
   const supabase = createClient();
@@ -76,7 +41,7 @@ export default async function PrivacyPage() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', fontSize: '1.05rem', color: 'var(--color-muted)' }}>
             
             <div>
-              {renderContent(content)}
+              <MarkdownRenderer content={content} />
             </div>
 
             <section style={{ marginTop: '2rem', padding: '2rem', background: 'var(--color-glass)', borderRadius: '12px', border: '1px solid var(--color-hairline)' }}>
